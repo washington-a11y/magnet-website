@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import dynamic from "next/dynamic";
-
-const CustomCursor = dynamic(() => import("./components/CustomCursor"), { ssr: false });
-const SmoothScroll = dynamic(() => import("./components/SmoothScroll"), { ssr: false });
+import Providers from "./components/Providers";
 
 export const metadata: Metadata = {
   title: "Magnet Studio — Design Agency Crafting Awesome Brands & Websites",
@@ -26,10 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ cursor: "none" }}>
       <body style={{ cursor: "none" }}>
-        <CustomCursor />
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
