@@ -182,15 +182,27 @@ export default function Footer() {
         {/* Footer logo */}
         <div
           ref={logoRef}
-          className="relative w-full overflow-hidden"
-          style={{ aspectRatio: "1229/165" }}
+          className="relative w-full shrink-0 overflow-hidden"
+          style={{ aspectRatio: "1229 / 165" }}
         >
-          <img src={imgVectorM} alt="M" className="footer-logo-letter absolute" style={{ inset: "2.1% 81.04% 2.5% 0" }} />
-          <img src={imgVectorA} alt="A" className="footer-logo-letter absolute" style={{ inset: "2.5% 63.09% 1.93% 20.03%" }} />
-          <img src={imgVectorG} alt="G" className="footer-logo-letter absolute" style={{ inset: "0 46.8% 0 36.36%" }} />
-          <img src={imgVectorN} alt="N" className="footer-logo-letter absolute" style={{ inset: "2.5% 30.12% 2.5% 54.39%" }} />
-          <img src={imgVectorE} alt="E" className="footer-logo-letter absolute" style={{ inset: "2.5% 15.44% 2.47% 71.1%" }} />
-          <img src={imgVectorT} alt="T" className="footer-logo-letter absolute" style={{ inset: "2.5% 0 1.93% 86.19%" }} />
+          <div className="footer-logo-letter absolute" style={{ inset: "2.1% 81.04% 2.5% 0" }}>
+            <img src={imgVectorM} alt="M" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
+          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 63.09% 1.93% 20.03%" }}>
+            <img src={imgVectorA} alt="A" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
+          <div className="footer-logo-letter absolute" style={{ inset: "0 46.8% 0 36.36%" }}>
+            <img src={imgVectorG} alt="G" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
+          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 30.12% 2.5% 54.39%" }}>
+            <img src={imgVectorN} alt="N" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
+          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 15.44% 2.47% 71.1%" }}>
+            <img src={imgVectorE} alt="E" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
+          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 0 1.93% 86.19%" }}>
+            <img src={imgVectorT} alt="T" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+          </div>
         </div>
       </div>
     </footer>
