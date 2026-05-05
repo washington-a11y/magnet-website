@@ -38,7 +38,7 @@ export default function Footer() {
       if (track) {
         gsap.to(track, {
           x: "-50%",
-          duration: 35,
+          duration: 80,
           ease: "none",
           repeat: -1,
         });
