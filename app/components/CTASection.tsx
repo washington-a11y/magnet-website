@@ -89,22 +89,31 @@ export default function CTASection() {
         ready to be magnetic
       </p>
 
-      {/* Decorative star */}
-      <div className="cta-deco absolute" style={{ right: "691px", top: "84px", width: "26px", height: "33px" }}>
+      {/* Decorative star — top right area, ~64% from left */}
+      <div className="cta-deco absolute" style={{ left: "64%", top: "20%", width: "26px", height: "33px" }}>
         <img src={imgStar} alt="" className="w-full h-full" />
       </div>
 
-      {/* Decorative illustrations */}
-      <div className="cta-deco absolute" style={{ left: "499px", bottom: "0", width: "86px", height: "110px" }}>
+      {/* Bottom decorations — all anchored to bottom: 0               */}
+      {/* Horizontal positions as % of the 1920px Figma frame          */}
+
+      {/* Left figure ~26% */}
+      <div className="cta-deco absolute" style={{ left: "26%", bottom: "0", width: "86px", height: "110px" }}>
         <img src={imgDeco1} alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="cta-deco absolute" style={{ right: "691px", bottom: "0", width: "146px", height: "113px" }}>
+
+      {/* Right figure ~64% */}
+      <div className="cta-deco absolute" style={{ left: "64%", bottom: "0", width: "146px", height: "113px" }}>
         <img src={imgDeco2} alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="cta-deco absolute" style={{ left: "552px", top: "86px", width: "650px", height: "201px" }}>
+
+      {/* Centre script/wordmark — widest element, ~29% to ~63% */}
+      <div className="cta-deco absolute" style={{ left: "28.7%", bottom: "0", width: "33.9%", height: "201px" }}>
         <img src={imgDeco3} alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="cta-deco absolute" style={{ right: "589px", bottom: "56px", width: "91px", height: "146px" }}>
+
+      {/* Far-right small figure ~69% */}
+      <div className="cta-deco absolute" style={{ left: "69.3%", bottom: "0", width: "91px", height: "146px" }}>
         <img src={imgDeco4} alt="" className="w-full h-full object-contain" />
       </div>
 
