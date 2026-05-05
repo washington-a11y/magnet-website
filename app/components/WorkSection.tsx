@@ -47,38 +47,44 @@ export default function WorkSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Sub-headline
-      gsap.from(".work-headline-word", {
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: "power2.out",
+      const cards = gsap.utils.toArray<HTMLElement>(".work-image");
+
+      // ── 1. Hide all cards on load ──
+      gsap.set(cards, { autoAlpha: 0 });
+
+      // ── 2. Pinned scroll timeline ──
+      // Section pins at the top of the viewport.
+      // User scrolls through 2400px of "virtual" scroll:
+      //   0–25%  → title fades out
+      //   25–100% → cards appear one by one
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".work-headline",
-          start: "top 85%",
-          toggleActions: "play none none reverse",
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=2400",
+          pin: true,
+          scrub: 1.2,
+          anticipatePin: 1,
         },
       });
 
-      // Staggered image reveals
-      gsap.from(".work-image", {
-        y: 80,
-        opacity: 0,
+      // Title fade-out
+      tl.to(".work-headline", {
+        autoAlpha: 0,
+        y: -40,
         duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".work-grid",
-          start: "top 75%",
-          toggleActions: "play none none reverse",
-        },
+        ease: "power2.in",
       });
 
-      // Parallax scroll on images
-      document.querySelectorAll(".work-image").forEach((el, i) => {
-        gsap.to(el, {
-          y: i % 2 === 0 ? -40 : 40,
+      // Cards fade in one by one — using autoAlpha only so parallax (y) stays independent
+      cards.forEach((card) => {
+        tl.to(card, { autoAlpha: 1, duration: 0.7, ease: "power2.out" }, ">");
+      });
+
+      // ── 3. Parallax — runs over full scroll range incl. pin spacer ──
+      cards.forEach((card, i) => {
+        gsap.to(card, {
+          y: i % 2 === 0 ? -50 : 50,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -89,8 +95,8 @@ export default function WorkSection() {
         });
       });
 
-      // Card flip on hover
-      document.querySelectorAll<HTMLElement>(".work-image").forEach((card) => {
+      // ── 4. Card flip on hover ──
+      cards.forEach((card) => {
         const inner = card.querySelector<HTMLElement>(".card-inner");
         if (!inner) return;
         card.addEventListener("mouseenter", () =>
@@ -112,7 +118,7 @@ export default function WorkSection() {
       style={{ minHeight: "1200px" }}
     >
       {/* Sub-headline */}
-      <div className="work-headline absolute top-[160px] left-1/2 -translate-x-1/2 text-center pointer-events-none z-10 whitespace-nowrap">
+      <div className="work-headline absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-10 whitespace-nowrap">
         <p className="text-[31px] text-[#111921]">
           <span className="work-headline-word font-['Neue_Haas_Grotesk_Text_Pro',sans-serif]">
             Building
