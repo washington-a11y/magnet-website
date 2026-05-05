@@ -40,16 +40,16 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      // Offset so the arrow tip (upper-right of the SVG) sits on the mouse point
+      // Offset so the pointer tip (top of the SVG ~29% from left, ~11% from top) sits on the mouse
       className="fixed top-0 left-0 pointer-events-none z-[9999]"
-      style={{ transform: "translate(-78%, -8%)" }}
+      style={{ transform: "translate(-29%, -11%)" }}
       aria-hidden
     >
       <img
-        src="/assets/cutom-cursor.svg"
+        src="/assets/pointer.svg"
         alt=""
-        width={36}
-        height={41}
+        width={34}
+        height={36}
         draggable={false}
       />
     </div>
