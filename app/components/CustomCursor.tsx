@@ -1,28 +1,35 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
+// Selectors that trigger the pointer cursor
+const POINTER_SELECTORS = "a, button, [role='button'], input, label, select, textarea, [tabindex]";
+
 export default function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorRef  = useRef<HTMLDivElement>(null);
+  const [isPointer, setIsPointer] = useState(false);
 
   useEffect(() => {
     const el = cursorRef.current;
     if (!el) return;
 
-    // Smooth-follow using GSAP quickTo — slight lag gives a natural feel
+    // Smooth-follow
     const xTo = gsap.quickTo(el, "x", { duration: 0.35, ease: "power3.out" });
     const yTo = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3.out" });
 
-    // Start offscreen so it doesn't flash at (0,0)
     gsap.set(el, { x: -100, y: -100 });
 
     const onMove = (e: MouseEvent) => {
       xTo(e.clientX);
       yTo(e.clientY);
+
+      // Swap cursor when over an interactive element
+      const target = e.target as Element;
+      setIsPointer(!!target.closest(POINTER_SELECTORS));
     };
 
-    // Scale down on click for tactile feedback
+    // Click scale feedback
     const onDown = () => gsap.to(el, { scale: 0.75, duration: 0.15, ease: "power2.out" });
     const onUp   = () => gsap.to(el, { scale: 1,    duration: 0.2,  ease: "back.out(2)" });
 
@@ -40,16 +47,18 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      // Offset so the pointer tip (top of the SVG ~29% from left, ~11% from top) sits on the mouse
       className="fixed top-0 left-0 pointer-events-none z-[9999]"
-      style={{ transform: "translate(-29%, -11%)" }}
+      style={{
+        // Each cursor has a different tip position — swap offset together with the image
+        transform: isPointer ? "translate(-29%, -11%)" : "translate(-78%, -8%)",
+      }}
       aria-hidden
     >
       <img
-        src="/assets/pointer.svg"
+        src={isPointer ? "/assets/pointer.svg" : "/assets/cutom-cursor.svg"}
         alt=""
-        width={34}
-        height={36}
+        width={isPointer ? 34 : 36}
+        height={isPointer ? 36 : 41}
         draggable={false}
       />
     </div>
