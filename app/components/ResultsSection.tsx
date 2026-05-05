@@ -127,7 +127,9 @@ export default function ResultsSection() {
         >
           {/* Client + quote */}
           <div className="flex flex-col gap-[32px]">
-            <img src={imgClientNg} alt="NG" className="h-[24px] w-auto object-contain self-start" />
+            <div className="relative shrink-0" style={{ width: "120px", height: "24px" }}>
+              <img src={imgClientNg} alt="NG" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+            </div>
 
             <div className="flex flex-col gap-[16px]">
               {/* Avatar */}
