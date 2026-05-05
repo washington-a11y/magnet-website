@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomCursor from "./components/CustomCursor";
+import CustomCursor   from "./components/CustomCursor";
+import SmoothScroll   from "./components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Magnet Studio — Design Agency Crafting Awesome Brands & Websites",
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en" style={{ cursor: "none" }}>
       <body style={{ cursor: "none" }}>
         <CustomCursor />
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
