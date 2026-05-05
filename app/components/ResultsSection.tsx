@@ -27,13 +27,13 @@ export default function ResultsSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Infinite marquee
+      // Infinite marquee — same visual speed as logo banner
       const track = marqueeRef.current;
       if (track) {
         const totalWidth = track.scrollWidth / 2;
         gsap.to(track, {
           x: `-${totalWidth}px`,
-          duration: 12,
+          duration: 25,
           ease: "none",
           repeat: -1,
         });
@@ -90,7 +90,7 @@ export default function ResultsSection() {
       className="relative flex flex-col gap-[48px] items-center w-full bg-[#111921] px-[96px] py-[96px]"
     >
       {/* ── Marquee ── */}
-      <div className="w-full overflow-hidden">
+      <div className="-mx-[96px] overflow-hidden">
         <div
           ref={marqueeRef}
           className="flex items-center gap-[16px] w-max"
@@ -127,7 +127,7 @@ export default function ResultsSection() {
         >
           {/* Client + quote */}
           <div className="flex flex-col gap-[32px]">
-            <img src={imgClientNg} alt="NG" className="h-[24px] w-auto object-contain" />
+            <img src={imgClientNg} alt="NG" className="h-[24px] w-auto object-contain self-start" />
 
             <div className="flex flex-col gap-[16px]">
               {/* Avatar */}
