@@ -42,14 +42,16 @@ const STATS = [
 ];
 
 export default function ClientsSection() {
-  const sectionRef   = useRef<HTMLElement>(null);
-  const logoTrackRef = useRef<HTMLDivElement>(null);
-  const carouselRef  = useRef<HTMLDivElement>(null);
+  const sectionRef        = useRef<HTMLElement>(null);
+  const logoTrackRef      = useRef<HTMLDivElement>(null);
+  const carouselWrapRef   = useRef<HTMLDivElement>(null);
+  const carouselTrackRef  = useRef<HTMLDivElement>(null);
 
-  // Drag-scroll state
-  const isDragging  = useRef(false);
-  const startX      = useRef(0);
-  const scrollLeft  = useRef(0);
+  // Transform-based drag state
+  const xOffset        = useRef(0);
+  const isDragging     = useRef(false);
+  const dragStartX     = useRef(0);
+  const dragStartOffset = useRef(0);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -93,20 +95,6 @@ export default function ClientsSection() {
         );
       });
 
-      // Carousel cards stagger reveal
-      gsap.from(".carousel-card", {
-        opacity: 0,
-        y: 40,
-        duration: 0.7,
-        stagger: 0.07,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: carouselRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
       // Partner section text reveal
       gsap.from(".partner-headline", {
         opacity: 0,
@@ -121,15 +109,19 @@ export default function ClientsSection() {
       });
     }, sectionRef);
 
-    // Carousel autoplay — 0.4px/frame (~24px/s at 60fps), pauses on drag
+    // Carousel autoplay — transform-based, same pattern as logo marquee
+    const track = carouselTrackRef.current;
     const tick = () => {
-      const el = carouselRef.current;
-      if (!el || isDragging.current) return;
-      el.scrollLeft += 0.4;
-      // Seamless loop: jump back when past the halfway point of duplicated items
-      if (el.scrollLeft >= el.scrollWidth / 2) {
-        el.scrollLeft = 0;
+      if (!track) return;
+      if (!isDragging.current) {
+        xOffset.current -= 0.5; // ~30px/s at 60fps
       }
+      // Seamless loop: once we've scrolled one full set of items, reset
+      const halfWidth = track.scrollWidth / 2;
+      if (Math.abs(xOffset.current) >= halfWidth) {
+        xOffset.current += halfWidth;
+      }
+      gsap.set(track, { x: xOffset.current });
     };
     gsap.ticker.add(tick);
 
@@ -139,20 +131,19 @@ export default function ClientsSection() {
     };
   }, []);
 
-  // Drag to scroll carousel
+  // Drag handlers — modify the shared xOffset so autoplay & drag stay in sync
   const onMouseDown = (e: React.MouseEvent) => {
-    isDragging.current = true;
-    startX.current     = e.pageX - (carouselRef.current?.offsetLeft ?? 0);
-    scrollLeft.current = carouselRef.current?.scrollLeft ?? 0;
+    isDragging.current    = true;
+    dragStartX.current    = e.pageX;
+    dragStartOffset.current = xOffset.current;
   };
-  const onMouseLeave = () => { isDragging.current = false; };
   const onMouseUp    = () => { isDragging.current = false; };
+  const onMouseLeave = () => { isDragging.current = false; };
   const onMouseMove  = (e: React.MouseEvent) => {
-    if (!isDragging.current || !carouselRef.current) return;
+    if (!isDragging.current) return;
     e.preventDefault();
-    const x    = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    carouselRef.current.scrollLeft = scrollLeft.current - walk;
+    const delta = (e.pageX - dragStartX.current) * 1.2;
+    xOffset.current = dragStartOffset.current + delta;
   };
 
   return (
@@ -224,14 +215,18 @@ export default function ClientsSection() {
 
       {/* ── Work carousel ── */}
       <div
-        ref={carouselRef}
-        className="drag-scroll flex gap-[40px] overflow-x-auto pb-4 w-full -mx-[96px] px-[96px]"
-        style={{ scrollbarWidth: "none" }}
+        ref={carouselWrapRef}
+        className="-mx-[96px] overflow-hidden cursor-grab active:cursor-grabbing"
         onMouseDown={onMouseDown}
         onMouseLeave={onMouseLeave}
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
+        <div
+          ref={carouselTrackRef}
+          className="flex gap-[40px] px-[96px] pb-4"
+          style={{ willChange: "transform" }}
+        >
         {[...carouselItems, ...carouselItems].map(({ src, label }, i) => (
           <div
             key={i}
@@ -258,6 +253,7 @@ export default function ClientsSection() {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </section>
   );
