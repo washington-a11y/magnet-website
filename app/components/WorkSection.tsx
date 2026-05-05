@@ -148,7 +148,7 @@ export default function WorkSection() {
               {/* Front face — project image */}
               <div
                 className="absolute inset-0 rounded-[8px] overflow-hidden"
-                style={{ backfaceVisibility: "hidden" }}
+                style={{ backfaceVisibility: "hidden", transform: "rotateY(0deg)" }}
               >
                 <img
                   src={src}
