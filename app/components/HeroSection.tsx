@@ -20,6 +20,7 @@ export default function HeroSection() {
   const logoRef     = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLDivElement>(null);
   const videoBoxRef = useRef<HTMLDivElement>(null);
+  const flagRef     = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -63,6 +64,27 @@ export default function HeroSection() {
           },
           "-=0.7"
         );
+
+      // Flag wave — anchored on the left (flagpole side)
+      gsap.to(flagRef.current, {
+        skewX: 7,
+        scaleX: 0.94,
+        duration: 0.9,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        transformOrigin: "left center",
+      });
+      // Second, slightly offset oscillation for a natural ripple
+      gsap.to(flagRef.current, {
+        rotation: 2.5,
+        duration: 1.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        transformOrigin: "left center",
+        delay: 0.2,
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -128,6 +150,7 @@ export default function HeroSection() {
               We&apos;re a{" "}
               <span className="relative inline-block">
                 <img
+                  ref={flagRef}
                   src={imgGroup1698}
                   alt="🇨🇦"
                   className="inline-block align-middle"
