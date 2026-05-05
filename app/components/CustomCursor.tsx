@@ -42,7 +42,7 @@ export default function CustomCursor() {
       ref={cursorRef}
       // translate(-50%,-50%) so the cursor tip centres on the mouse point
       className="fixed top-0 left-0 pointer-events-none z-[9999]"
-      style={{ transform: "translate(-50%, -50%)" }}
+      style={{ transform: "translate(-50%, -50%)", mixBlendMode: "difference" }}
       aria-hidden
     >
       <img
