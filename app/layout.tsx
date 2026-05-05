@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomCursor   from "./components/CustomCursor";
-import SmoothScroll   from "./components/SmoothScroll";
+import dynamic from "next/dynamic";
+
+const CustomCursor = dynamic(() => import("./components/CustomCursor"), { ssr: false });
+const SmoothScroll = dynamic(() => import("./components/SmoothScroll"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Magnet Studio — Design Agency Crafting Awesome Brands & Websites",
