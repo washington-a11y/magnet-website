@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CustomCursor from "./components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Magnet Studio — Design Agency Crafting Awesome Brands & Websites",
@@ -20,8 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" style={{ cursor: "none" }}>
+      <body style={{ cursor: "none" }}>
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }

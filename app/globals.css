@@ -80,6 +80,13 @@
 }
 */
 
+/* ─── Custom cursor — hide system cursor everywhere ─────── */
+*,
+*::before,
+*::after {
+  cursor: none !important;
+}
+
 /* ─── Base Reset ─────────────────────────────────────── */
 *,
 *::before,
