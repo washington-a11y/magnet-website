@@ -121,7 +121,22 @@ export default function ClientsSection() {
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    // Carousel autoplay — 0.4px/frame (~24px/s at 60fps), pauses on drag
+    const tick = () => {
+      const el = carouselRef.current;
+      if (!el || isDragging.current) return;
+      el.scrollLeft += 0.4;
+      // Seamless loop: jump back when past the halfway point of duplicated items
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+    };
+    gsap.ticker.add(tick);
+
+    return () => {
+      gsap.ticker.remove(tick);
+      ctx.revert();
+    };
   }, []);
 
   // Drag to scroll carousel
@@ -145,8 +160,8 @@ export default function ClientsSection() {
       ref={sectionRef}
       className="relative flex flex-col items-start justify-between w-full bg-[#f9faff] px-[96px] py-[64px] gap-[64px]"
     >
-      {/* ── Logo marquee ── */}
-      <div className="w-full overflow-hidden border-b border-[rgba(65,71,77,0.3)] pb-[64px]">
+      {/* ── Logo marquee — full bleed ── */}
+      <div className="-mx-[96px] overflow-hidden border-b border-[rgba(65,71,77,0.3)] pb-[64px]">
         <div className="flex items-center">
           <div
             ref={logoTrackRef}
@@ -217,7 +232,7 @@ export default function ClientsSection() {
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
-        {carouselItems.map(({ src, label }, i) => (
+        {[...carouselItems, ...carouselItems].map(({ src, label }, i) => (
           <div
             key={i}
             className="carousel-card relative rounded-[16px] overflow-hidden shrink-0 flex items-end justify-center"
