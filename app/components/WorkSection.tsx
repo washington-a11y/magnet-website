@@ -6,10 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const imgImage6      = "http://localhost:3845/assets/43adfb967cb30121a49fd2aedf25d0a3e740acf8.png";
-const imgRectangle198 = "http://localhost:3845/assets/0f26b35d39dd5fe1e3a377fd3d7ad3e5ffa6f35c.png";
-const imgRectangle194 = "http://localhost:3845/assets/d29099a355c65750667c69a33a39dc4ce6897c90.png";
-const imgRectangle201 = "http://localhost:3845/assets/e3a1032c2e0214c275d68511daa612859b7e7d3c.png";
+const imgImage6      = "/assets/43adfb967cb30121a49fd2aedf25d0a3e740acf8.png";
+const imgRectangle198 = "/assets/0f26b35d39dd5fe1e3a377fd3d7ad3e5ffa6f35c.png";
+const imgRectangle194 = "/assets/d29099a355c65750667c69a33a39dc4ce6897c90.png";
+const imgRectangle201 = "/assets/e3a1032c2e0214c275d68511daa612859b7e7d3c.png";
 
 const WORK_IMAGES = [
   {

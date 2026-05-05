@@ -6,12 +6,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const imgStar        = "http://localhost:3845/assets/e3b1833c7b3d8d79e0d2faecc07682d205ff0961.svg";
-const imgDeco1       = "http://localhost:3845/assets/30f40dd0e8d630d95986ae3bc87f3bc9f2ca284b.svg";
-const imgDeco2       = "http://localhost:3845/assets/4d398202905b0e70152ceb1cc8476cc0bd55af24.svg";
-const imgDeco3       = "http://localhost:3845/assets/61aa992793c1430c855f0a55a462f7cdace9b080.svg";
-const imgDeco4       = "http://localhost:3845/assets/c1b8de66591eb992fe5106fe70f217b8f3b6a390.svg";
-const imgCalIcon     = "http://localhost:3845/assets/ee48e31e9c6ce2362b7eb8e8b95bf54f278f3509.svg";
+const imgStar        = "/assets/e3b1833c7b3d8d79e0d2faecc07682d205ff0961.svg";
+const imgDeco1       = "/assets/30f40dd0e8d630d95986ae3bc87f3bc9f2ca284b.svg";
+const imgDeco2       = "/assets/4d398202905b0e70152ceb1cc8476cc0bd55af24.svg";
+const imgDeco3       = "/assets/61aa992793c1430c855f0a55a462f7cdace9b080.svg";
+const imgDeco4       = "/assets/c1b8de66591eb992fe5106fe70f217b8f3b6a390.svg";
+const imgCalIcon     = "/assets/ee48e31e9c6ce2362b7eb8e8b95bf54f278f3509.svg";
 
 export default function CTASection() {
   const sectionRef  = useRef<HTMLElement>(null);

@@ -8,32 +8,32 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Client logos
 const logos = [
-  { src: "http://localhost:3845/assets/4f42e92c380197238bb55cca677c987ffb62ab7e.svg", alt: "NG", w: 133, h: 27 },
-  { src: "http://localhost:3845/assets/3e2629b56c31f21c4b03753658638044716b853b.svg", alt: "Agnostiq", w: 101, h: 40 },
-  { src: "http://localhost:3845/assets/2e5d62fd69e0fb7ae5669ad870131a87902719c5.svg", alt: "HostGenius", w: 137, h: 18 },
-  { src: "http://localhost:3845/assets/8688675135c75e4f2ba8e3e02f349d55387287f1.svg", alt: "StackDeck", w: 155, h: 31 },
-  { src: "http://localhost:3845/assets/1abd614a8fc8eecfdb31f407b7f412f6187977b5.svg", alt: "Epoch", w: 119, h: 44 },
-  { src: "http://localhost:3845/assets/efc2050eaeeb437c5dbe262e760da8354b510874.svg", alt: "Saving Box", w: 137, h: 27 },
-  { src: "http://localhost:3845/assets/3d905369f3d2619d6cc19df2a6db734ca80d79cf.svg", alt: "Teamtown", w: 133, h: 20 },
-  { src: "http://localhost:3845/assets/68abfc13d7ccaec57e93ae611ce73d1be87a4d83.svg", alt: "Covalent", w: 133, h: 32 },
+  { src: "/assets/4f42e92c380197238bb55cca677c987ffb62ab7e.svg", alt: "NG", w: 133, h: 27 },
+  { src: "/assets/3e2629b56c31f21c4b03753658638044716b853b.svg", alt: "Agnostiq", w: 101, h: 40 },
+  { src: "/assets/2e5d62fd69e0fb7ae5669ad870131a87902719c5.svg", alt: "HostGenius", w: 137, h: 18 },
+  { src: "/assets/8688675135c75e4f2ba8e3e02f349d55387287f1.svg", alt: "StackDeck", w: 155, h: 31 },
+  { src: "/assets/1abd614a8fc8eecfdb31f407b7f412f6187977b5.svg", alt: "Epoch", w: 119, h: 44 },
+  { src: "/assets/efc2050eaeeb437c5dbe262e760da8354b510874.svg", alt: "Saving Box", w: 137, h: 27 },
+  { src: "/assets/3d905369f3d2619d6cc19df2a6db734ca80d79cf.svg", alt: "Teamtown", w: 133, h: 20 },
+  { src: "/assets/68abfc13d7ccaec57e93ae611ce73d1be87a4d83.svg", alt: "Covalent", w: 133, h: 32 },
 ];
 
 // Work carousel images
 const carouselItems = [
-  { src: "http://localhost:3845/assets/9faad5bf3d4f78f8e9d90af477654607626b6168.png",  label: "Web Design" },
-  { src: "http://localhost:3845/assets/0752151161faa969249a2092707a5c2b8ea43b4f.png",  label: "Design Strategy" },
-  { src: "http://localhost:3845/assets/3060bc63b25193d203a6a0bcc8c7fca8c28c3df3.png",  label: "3D Design" },
-  { src: "http://localhost:3845/assets/9765a166d08477b82315c7b42431cf7010e44222.png",  label: "Motion Design" },
-  { src: "http://localhost:3845/assets/3e250ee9c3916049529f40ff730339ba83248388.png",  label: "Branding" },
-  { src: "http://localhost:3845/assets/79f4c69a18de5baf839446384307f085fd15a31a.png",  label: "Design Consultation" },
-  { src: "http://localhost:3845/assets/942e91d951eb14cbb7e72e650f00fcca3bb0b037.png",  label: "Presentation Design" },
-  { src: "http://localhost:3845/assets/fe40aa7c31db576d420704a8ac0a7e24a1457288.png",  label: "Illustration Design" },
-  { src: "http://localhost:3845/assets/f5794adda0f69053da568b3b48b1fff3132414f4.png",  label: "Packaging Design" },
-  { src: "http://localhost:3845/assets/7f68765c7b3c7d95adb2ff34d7c9b715db5392b3.png",  label: "Social Media Design" },
-  { src: "http://localhost:3845/assets/3d73bff43847107234ad568316f21dd2e1918653.png",  label: "Print Design" },
+  { src: "/assets/9faad5bf3d4f78f8e9d90af477654607626b6168.png",  label: "Web Design" },
+  { src: "/assets/0752151161faa969249a2092707a5c2b8ea43b4f.png",  label: "Design Strategy" },
+  { src: "/assets/3060bc63b25193d203a6a0bcc8c7fca8c28c3df3.png",  label: "3D Design" },
+  { src: "/assets/9765a166d08477b82315c7b42431cf7010e44222.png",  label: "Motion Design" },
+  { src: "/assets/3e250ee9c3916049529f40ff730339ba83248388.png",  label: "Branding" },
+  { src: "/assets/79f4c69a18de5baf839446384307f085fd15a31a.png",  label: "Design Consultation" },
+  { src: "/assets/942e91d951eb14cbb7e72e650f00fcca3bb0b037.png",  label: "Presentation Design" },
+  { src: "/assets/fe40aa7c31db576d420704a8ac0a7e24a1457288.png",  label: "Illustration Design" },
+  { src: "/assets/f5794adda0f69053da568b3b48b1fff3132414f4.png",  label: "Packaging Design" },
+  { src: "/assets/7f68765c7b3c7d95adb2ff34d7c9b715db5392b3.png",  label: "Social Media Design" },
+  { src: "/assets/3d73bff43847107234ad568316f21dd2e1918653.png",  label: "Print Design" },
 ];
 
-const imgArrowIcon = "http://localhost:3845/assets/54981ac01f676b8630d69c2998ac170543dc058c.svg";
+const imgArrowIcon = "/assets/54981ac01f676b8630d69c2998ac170543dc058c.svg";
 
 const STATS = [
   { value: "5+",  label: "Years Average Experience" },

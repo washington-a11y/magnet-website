@@ -8,19 +8,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 const POSTS = [
   {
-    src:   "http://localhost:3845/assets/43fbd1bbb3d3a3e249e03c79b9ca211a2cbdb973.png",
+    src:   "/assets/43fbd1bbb3d3a3e249e03c79b9ca211a2cbdb973.png",
     title: "How UX/UI Design Converts Visitors into Customers",
     date:  "FEB 24, 2026",
     imgH:  "323px",
   },
   {
-    src:   "http://localhost:3845/assets/d0b77ce149b1f99de71fcc1a20043ef02022cbc8.png",
+    src:   "/assets/d0b77ce149b1f99de71fcc1a20043ef02022cbc8.png",
     title: "How Cohesive Branding Builds Instant Trust",
     date:  "FEB 24, 2026",
     imgH:  "464px",
   },
   {
-    src:   "http://localhost:3845/assets/d7d92b39dd5e592722d0848974ed64eafb321f5c.png",
+    src:   "/assets/d7d92b39dd5e592722d0848974ed64eafb321f5c.png",
     title: "The Tangible ROI of Strategic Business Design",
     date:  "FEB 24, 2026",
     imgH:  "335px",

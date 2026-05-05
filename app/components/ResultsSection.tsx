@@ -6,10 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const imgFrame1806   = "http://localhost:3845/assets/a7d506ddb0d4708d78c4b7abea26668e69a7cc31.png";
-const imgClientImage = "http://localhost:3845/assets/a0d43afc8112fbe95229601fe597a5b3c88ca65c.png";
-const imgDot         = "http://localhost:3845/assets/c889f38fce03a6ae9c3472b1e5ca9ac76a85fd00.svg";
-const imgClientNg    = "http://localhost:3845/assets/c978a3271c9c7951c04cf4e98d4b49b61d54419c.svg";
+const imgFrame1806   = "/assets/a7d506ddb0d4708d78c4b7abea26668e69a7cc31.png";
+const imgClientImage = "/assets/a0d43afc8112fbe95229601fe597a5b3c88ca65c.png";
+const imgDot         = "/assets/c889f38fce03a6ae9c3472b1e5ca9ac76a85fd00.svg";
+const imgClientNg    = "/assets/c978a3271c9c7951c04cf4e98d4b49b61d54419c.svg";
 
 const RESULTS = [
   { stat: "142%", label: "increase in user engagement" },

@@ -6,11 +6,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const imgWhatWeDo   = "http://localhost:3845/assets/37ab8e7c17520009f6edc01061fcf1609a2341e8.svg";
-const imgArrowIcon  = "http://localhost:3845/assets/54981ac01f676b8630d69c2998ac170543dc058c.svg";
-const imgService1   = "http://localhost:3845/assets/a25b6b5ffc7a5e030ab80baedc939135f1af4c72.png";
-const imgService2   = "http://localhost:3845/assets/9faad5bf3d4f78f8e9d90af477654607626b6168.png";
-const imgService3   = "http://localhost:3845/assets/d3f6da31a406b372959221c94a6b294a784e262e.png";
+const imgWhatWeDo   = "/assets/37ab8e7c17520009f6edc01061fcf1609a2341e8.svg";
+const imgArrowIcon  = "/assets/54981ac01f676b8630d69c2998ac170543dc058c.svg";
+const imgService1   = "/assets/a25b6b5ffc7a5e030ab80baedc939135f1af4c72.png";
+const imgService2   = "/assets/9faad5bf3d4f78f8e9d90af477654607626b6168.png";
+const imgService3   = "/assets/d3f6da31a406b372959221c94a6b294a784e262e.png";
 
 const SERVICES = [
   {

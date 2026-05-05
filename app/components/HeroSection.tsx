@@ -4,13 +4,13 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 // Figma asset URLs (localhost Figma server — swap for your hosted assets)
-const imgVectorM   = "http://localhost:3845/assets/5bf92d92120899ea625773fc465a6a74df5decfa.svg";
-const imgVectorA   = "http://localhost:3845/assets/36dfdab13d470f1cedc8845d1a22a5425beed4ff.svg";
-const imgVectorG   = "http://localhost:3845/assets/e629751f536d67c0c11462459e513c38c37526f1.svg";
-const imgVectorN   = "http://localhost:3845/assets/41fba5acd42a6b72dbb6b9903ddb58ae8130ad71.svg";
-const imgVectorE   = "http://localhost:3845/assets/6d774790104d0cb6fcd56ada474b7ad2abfdae42.svg";
-const imgVectorT   = "http://localhost:3845/assets/87c3d4ed9eac32e0cc620d2b7afe0734556df8cf.svg";
-const imgGroup1698 = "http://localhost:3845/assets/b26ad21cd114f5a0799cb0e084f0474030a60ff3.svg";
+const imgVectorM   = "/assets/5bf92d92120899ea625773fc465a6a74df5decfa.svg";
+const imgVectorA   = "/assets/36dfdab13d470f1cedc8845d1a22a5425beed4ff.svg";
+const imgVectorG   = "/assets/e629751f536d67c0c11462459e513c38c37526f1.svg";
+const imgVectorN   = "/assets/41fba5acd42a6b72dbb6b9903ddb58ae8130ad71.svg";
+const imgVectorE   = "/assets/6d774790104d0cb6fcd56ada474b7ad2abfdae42.svg";
+const imgVectorT   = "/assets/87c3d4ed9eac32e0cc620d2b7afe0734556df8cf.svg";
+const imgGroup1698 = "/assets/b26ad21cd114f5a0799cb0e084f0474030a60ff3.svg";
 
 const NAV_LINKS = ["Work", "About", "Blog", "Contact us"];
 

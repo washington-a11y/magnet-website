@@ -11,18 +11,7 @@ const nextConfig = {
   basePath,
   assetPrefix,
 
-  // ── Image domains ────────────────────────────────────
-  images: {
-    remotePatterns: [
-      {
-        // Figma localhost asset server (dev only — swap for CDN in prod)
-        protocol: "http",
-        hostname: "localhost",
-        port: "3845",
-        pathname: "/assets/**",
-      },
-    ],
-  },
+  // All assets served from /public/assets — no remote patterns needed
 };
 
 module.exports = nextConfig;

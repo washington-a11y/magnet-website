@@ -7,14 +7,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 // Logo letters (same as hero)
-const imgVectorM = "http://localhost:3845/assets/74eedc4876e73c3efff47e73a1ab172fcf2345f0.svg";
-const imgVectorA = "http://localhost:3845/assets/832b31364304dc024a9d95606cc195f0c6d867fa.svg";
-const imgVectorG = "http://localhost:3845/assets/f396358826920d0fcfe97c1734fcc79e717e1ab6.svg";
-const imgVectorN = "http://localhost:3845/assets/09c6e3847c2a9da11f17d5976e22d9e379752999.svg";
-const imgVectorE = "http://localhost:3845/assets/d376bbfaf87b16b9f1819c6e1f2cbaa6e67ff3a7.svg";
-const imgVectorT = "http://localhost:3845/assets/c7d13a0a8c7c53f021e0ca1578dd61043a8ad36b.svg";
-const imgArrow   = "http://localhost:3845/assets/714abcd3e8cb1f8571b281786c0effc8828750fa.svg";
-const imgPlusIcon = "http://localhost:3845/assets/34a5f835f54ad0f8263cebeded849b7f8f78548d.svg";
+const imgVectorM = "/assets/74eedc4876e73c3efff47e73a1ab172fcf2345f0.svg";
+const imgVectorA = "/assets/832b31364304dc024a9d95606cc195f0c6d867fa.svg";
+const imgVectorG = "/assets/f396358826920d0fcfe97c1734fcc79e717e1ab6.svg";
+const imgVectorN = "/assets/09c6e3847c2a9da11f17d5976e22d9e379752999.svg";
+const imgVectorE = "/assets/d376bbfaf87b16b9f1819c6e1f2cbaa6e67ff3a7.svg";
+const imgVectorT = "/assets/c7d13a0a8c7c53f021e0ca1578dd61043a8ad36b.svg";
+const imgArrow   = "/assets/714abcd3e8cb1f8571b281786c0effc8828750fa.svg";
+const imgPlusIcon = "/assets/34a5f835f54ad0f8263cebeded849b7f8f78548d.svg";
 
 const FOOTER_MARQUEE =
   "BRANDING, WEB, UI/UX, STRATEGY, DESIGN, CORPORATE IDENTITY, PROTOTYPES, KEYNOTE PRESENTATIONS, ADVERTISING, COPYWRITING, CONTENT GENERATION, DIGITAL, OUTDOOR, PRODUCT NAMING, PRODUCT DEVELOPMENT, PACKAGING, BROCHURES, CATALOGUES, FLYERS, DESIGN, PHOTOGRAPHY, ART DIRECTION, PHOTO RETOUCHING, ILLUSTRATION, DIRECT MAIL, EXHIBITIONS + TRADE SHOWS, EVENTS, SIGNAGE.";

@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const imgPlayIcon = "http://localhost:3845/assets/280f2250d66a9c75ad075b72b10a7b29f8541f84.svg";
+const imgPlayIcon = "/assets/280f2250d66a9c75ad075b72b10a7b29f8541f84.svg";
 
 export default function VideoSection() {
   const sectionRef  = useRef<HTMLElement>(null);
