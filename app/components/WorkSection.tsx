@@ -12,10 +12,34 @@ const imgRectangle194 = "http://localhost:3845/assets/d29099a355c65750667c69a33a
 const imgRectangle201 = "http://localhost:3845/assets/e3a1032c2e0214c275d68511daa612859b7e7d3c.png";
 
 const WORK_IMAGES = [
-  { src: imgImage6,       style: { top: "32px",  left: "0",    width: "459px", height: "510px" } },
-  { src: imgRectangle198, style: { top: "114px", left: "574px", width: "598px", height: "430px" } },
-  { src: imgRectangle194, style: { top: "684px", left: "42px",  width: "501px", height: "360px" } },
-  { src: imgRectangle201, style: { top: "738px", left: "666px", width: "410px", height: "430px" } },
+  {
+    src: imgImage6,
+    style: { top: "32px", left: "0", width: "459px", height: "510px" },
+    title: "NorthGuide",
+    description: "Brand identity, web design & digital strategy for a modern navigation platform.",
+    href: "#",
+  },
+  {
+    src: imgRectangle198,
+    style: { top: "114px", left: "574px", width: "598px", height: "430px" },
+    title: "Elevate Co",
+    description: "UI/UX redesign and corporate identity system built for scale.",
+    href: "#",
+  },
+  {
+    src: imgRectangle194,
+    style: { top: "684px", left: "42px", width: "501px", height: "360px" },
+    title: "Forma Studio",
+    description: "End-to-end brand development and packaging design for a luxury product line.",
+    href: "#",
+  },
+  {
+    src: imgRectangle201,
+    style: { top: "738px", left: "666px", width: "410px", height: "430px" },
+    title: "Axiom Group",
+    description: "Strategic rebrand, web design and keynote presentation suite.",
+    href: "#",
+  },
 ];
 
 export default function WorkSection() {
@@ -52,8 +76,8 @@ export default function WorkSection() {
       });
 
       // Parallax scroll on images
-      document.querySelectorAll(".work-image").forEach((img, i) => {
-        gsap.to(img, {
+      document.querySelectorAll(".work-image").forEach((el, i) => {
+        gsap.to(el, {
           y: i % 2 === 0 ? -40 : 40,
           ease: "none",
           scrollTrigger: {
@@ -63,6 +87,18 @@ export default function WorkSection() {
             scrub: 1.5,
           },
         });
+      });
+
+      // Card flip on hover
+      document.querySelectorAll<HTMLElement>(".work-image").forEach((card) => {
+        const inner = card.querySelector<HTMLElement>(".card-inner");
+        if (!inner) return;
+        card.addEventListener("mouseenter", () =>
+          gsap.to(inner, { rotateY: 180, duration: 0.55, ease: "power2.inOut" })
+        );
+        card.addEventListener("mouseleave", () =>
+          gsap.to(inner, { rotateY: 0, duration: 0.55, ease: "power2.inOut" })
+        );
       });
     }, sectionRef);
 
@@ -98,17 +134,50 @@ export default function WorkSection() {
         className="work-grid relative mx-auto"
         style={{ width: "1172px", height: "1136px" }}
       >
-        {WORK_IMAGES.map(({ src, style }, i) => (
+        {WORK_IMAGES.map(({ src, style, title, description, href }, i) => (
           <div
             key={i}
-            className="work-image absolute rounded-[8px] overflow-hidden"
-            style={style as React.CSSProperties}
+            className="work-image absolute cursor-pointer"
+            style={{ ...(style as React.CSSProperties), perspective: "1000px" }}
           >
-            <img
-              src={src}
-              alt={`Work ${i + 1}`}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            {/* Rotating inner — holds both faces */}
+            <div
+              className="card-inner relative w-full h-full"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* Front face — project image */}
+              <div
+                className="absolute inset-0 rounded-[8px] overflow-hidden"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <img
+                  src={src}
+                  alt={title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Back face — project info */}
+              <div
+                className="absolute inset-0 rounded-[8px] bg-[#111921] flex flex-col justify-between px-[32px] py-[32px]"
+                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+              >
+                <div className="flex flex-col gap-[12px]">
+                  <p className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[24px] text-[#fafafa] leading-[1.2]">
+                    {title}
+                  </p>
+                  <p className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[14px] text-[rgba(250,250,250,0.7)] leading-[1.6]">
+                    {description}
+                  </p>
+                </div>
+                <a
+                  href={href}
+                  className="inline-flex items-center justify-center self-start bg-[#fdc700] text-[#111921] font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] font-bold text-[13px] tracking-[0.26px] px-[24px] py-[12px] rounded-[96px] hover:opacity-90 transition-opacity"
+                >
+                  Visit Project →
+                </a>
+              </div>
+            </div>
           </div>
         ))}
       </div>
