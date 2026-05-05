@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────── */
+:root {
+  --bg-1: #111921;
+  --bg-2: #f9faff;
+  --bg-3: #fdc700;
+  --bg-4: #1c1a96;
+  --text-colour-primary: #fafafa;
+  --text-colour-secondary: #41474d;
+  --border-primary: rgba(65, 71, 77, 0.3);
+  --xlarge: 96px;
+  --large: 64px;
+  --medium: 32px;
+  --small: 16px;
+  --xsmall: 8px;
+  --none: 0px;
+}
+
+/* ─── Custom Font Faces ──────────────────────────────── */
+/* Drop your font files into /public/fonts/ and uncomment: */
+
+/*
+@font-face {
+  font-family: 'Swis721 Ex BT';
+  src: url('/fonts/Swis721ExBT-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swis721 Blk BT';
+  src: url('/fonts/Swis721BlkBT-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk Text Pro';
+  src: url('/fonts/NeueHaasGrotesk-55Roman.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk Text Pro';
+  src: url('/fonts/NeueHaasGrotesk-65Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk Text Pro';
+  src: url('/fonts/NeueHaasGrotesk-75Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk Display Pro';
+  src: url('/fonts/NeueHaasGroteskDisplay-75Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gyst Variable';
+  src: url('/fonts/GystVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+*/
+
+/* ─── Base Reset ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #111921;
+  color: #fafafa;
+  font-family: 'Neue Haas Grotesk Text Pro', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── Marquee / Ticker ────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* ─── Work carousel drag scroll ─────────────────────── */
+.drag-scroll {
+  cursor: grab;
+  user-select: none;
+}
+
+.drag-scroll:active {
+  cursor: grabbing;
+}
+
+/* ─── Utility: clip hidden overflow for reveal anims ─── */
+.overflow-clip {
+  overflow: hidden;
+}
+
+/* ─── Smooth nav link underline ─────────────────────── */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}

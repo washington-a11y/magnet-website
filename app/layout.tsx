@@ -1,0 +1,27 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Magnet Studio — Design Agency Crafting Awesome Brands & Websites",
+  description:
+    "We're a design agency crafting awesome brands and websites. Based in Canada, building brands for the modern world since 2018.",
+  openGraph: {
+    title: "Magnet Studio",
+    description:
+      "Brand Strategy, Digital Design & Print — all for one predictable monthly fee.",
+    type: "website",
+    locale: "en_CA",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
