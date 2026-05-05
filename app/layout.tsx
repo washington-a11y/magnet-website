@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ cursor: "none" }}>
-      <body style={{ cursor: "none" }}>
+    <html lang="en">
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
