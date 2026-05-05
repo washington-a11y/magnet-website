@@ -1,3 +1,4 @@
+import NavScroll      from "./components/NavScroll";
 import HeroSection    from "./components/HeroSection";
 import VideoSection   from "./components/VideoSection";
 import WorkSection    from "./components/WorkSection";
@@ -11,6 +12,9 @@ import Footer         from "./components/Footer";
 export default function Home() {
   return (
     <main>
+      {/* Sticky nav — hidden until user scrolls up */}
+      <NavScroll />
+
       {/* 1. Hero — dark bg, full-screen, logo + nav + tagline + video */}
       <HeroSection />
 
