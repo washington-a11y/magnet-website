@@ -205,7 +205,7 @@ export default function ClientsSection() {
               >
                 {value}
               </p>
-              <p className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[14px] text-[#41474d] tracking-[0.28px] leading-[1.5] max-w-[160px]">
+              <p className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[14px] text-[#41474d] tracking-[0.28px] leading-[1.5] whitespace-nowrap">
                 {label}
               </p>
             </div>
