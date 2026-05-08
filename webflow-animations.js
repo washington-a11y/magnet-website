@@ -779,33 +779,36 @@
     ────────────────────────────────────────────── */
     var wNav = document.querySelector('.w-nav');
     if (wNav) {
-      var navHidden = false;
-      // Only reveal the sticky nav once the user has scrolled past the hero section
-      var heroEl     = document.querySelector('.herosection');
-      var heroBottom = heroEl ? heroEl.offsetTop + heroEl.offsetHeight : window.innerHeight;
+      // Webflow sets this nav to position:relative + display:none by default.
+      // Override so it behaves like the fixed sticky nav in the Next.js demo.
+      wNav.style.position = 'fixed';
+      wNav.style.top      = '0';
+      wNav.style.left     = '0';
+      wNav.style.right    = '0';
+      wNav.style.display  = 'block';
 
-      // Use Lenis scroll event — gives us e.direction (1=down, -1=up) and e.scroll
+      // Start hidden above the viewport (matches Next.js yPercent: -100)
+      gsap.set(wNav, { yPercent: -110 });
+      var navHidden = true;
+
       lenis.on('scroll', function (e) {
         var y         = e.scroll;
         var goingDown = e.direction === 1;
 
-        if (y < heroBottom) {
-          // Still inside the hero — hide the sticky nav
-          if (navHidden) {
-            gsap.to(wNav, { y: 0, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
-            navHidden = false;
+        if (y < 80) {
+          // Near top — keep hidden (hero nav is visible)
+          if (!navHidden) {
+            gsap.to(wNav, { yPercent: -110, duration: 0.35, ease: 'power3.in', overwrite: 'auto' });
+            navHidden = true;
           }
-          // Force hidden while in hero (nav is part of the hero itself)
-          gsap.set(wNav, { y: -(wNav.offsetHeight + 4) });
-          navHidden = true;
-        } else if (goingDown && !navHidden) {
-          // Past hero, scrolling down → slide nav out
-          gsap.to(wNav, { y: -(wNav.offsetHeight + 4), duration: 0.28, ease: 'power2.in', overwrite: 'auto' });
-          navHidden = true;
         } else if (!goingDown && navHidden) {
-          // Past hero, scrolling up → slide nav in
-          gsap.to(wNav, { y: 0, duration: 0.38, ease: 'power2.out', overwrite: 'auto' });
+          // Scrolling up — slide in
+          gsap.to(wNav, { yPercent: 0, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
           navHidden = false;
+        } else if (goingDown && !navHidden) {
+          // Scrolling down — slide out
+          gsap.to(wNav, { yPercent: -110, duration: 0.35, ease: 'power3.in', overwrite: 'auto' });
+          navHidden = true;
         }
       });
     }
