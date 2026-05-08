@@ -73,6 +73,45 @@
     }
 
     /* ──────────────────────────────────────────────
+       2b. NAV LINK HOVER — sliding underline (matches Next.js demo)
+           Targets all .menu-item links: hero nav + sticky nav
+    ────────────────────────────────────────────── */
+    document.querySelectorAll('.menu-item').forEach(function (link) {
+      // Ensure the link is a positioning context
+      link.style.position = 'relative';
+
+      // Inject underline span
+      var line = document.createElement('span');
+      line.style.cssText = [
+        'position:absolute',
+        'bottom:-2px',
+        'left:0',
+        'width:100%',
+        'height:1px',
+        'background:currentColor',
+        'display:block',
+        'pointer-events:none'
+      ].join(';');
+      gsap.set(line, { scaleX: 0, transformOrigin: 'left center' });
+      link.appendChild(line);
+
+      link.addEventListener('mouseenter', function () {
+        gsap.to(line, { scaleX: 1, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+      });
+      link.addEventListener('mouseleave', function () {
+        gsap.to(line, {
+          scaleX: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+          transformOrigin: 'right center',
+          overwrite: 'auto',
+          onComplete: function () { gsap.set(line, { transformOrigin: 'left center' }); }
+        });
+      });
+    });
+
+
+    /* ──────────────────────────────────────────────
        3. HERO VIDEO SCROLL EXPAND
           As user scrolls, surrounding content fades out
           and the video scales to fill the full viewport
