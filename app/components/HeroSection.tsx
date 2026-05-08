@@ -185,7 +185,7 @@ export default function HeroSection() {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           >
-            <source src="/_videos/v1/71f9263fd7a931f583808277e6961a0fa4cd3351" />
+            <source src="/assets/video.mp4" type="video/mp4" />
           </video>
         </div>
       </div>
