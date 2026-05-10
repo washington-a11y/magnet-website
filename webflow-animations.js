@@ -122,8 +122,8 @@
       var vh = window.innerHeight;
       var r  = videoExpand.getBoundingClientRect();
 
-      // Scale needed to cover the full viewport
-      var scaleNeeded = Math.max(vw / r.width, vh / r.height);
+      // Scale just enough to cover the viewport width
+      var scaleNeeded = vw / r.width;
 
       // Translate video center to viewport center
       var tx = (vw / 2) - (r.left + r.width / 2);
