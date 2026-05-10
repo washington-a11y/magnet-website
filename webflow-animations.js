@@ -250,48 +250,74 @@
     var workSection  = document.querySelector('.worksection');
     var workCards    = gsap.utils.toArray('.project-item');
 
+    var isMobile = window.innerWidth < 768;
+
     if (workSection && workCards.length) {
-      // Hide cards initially — will be revealed by pinned timeline
-      gsap.set(workCards, { autoAlpha: 0 });
-
-      // Pinned timeline: slogan fades out → cards appear one by one
-      var workTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: workSection,
-          start: 'top top',
-          end: '+=2400',
-          pin: true,
-          scrub: 1.2,
-          anticipatePin: 1,
-        },
-      });
-
-      // Slogan fades out first
-      workTl.to('.slogan', {
-        autoAlpha: 0,
-        y: -40,
-        duration: 1,
-        ease: 'power2.in',
-      });
-
-      // Cards reveal one by one
-      workCards.forEach(function (card) {
-        workTl.to(card, { autoAlpha: 1, duration: 0.7, ease: 'power2.out' }, '>');
-      });
-
-      // Alternating parallax on cards
-      workCards.forEach(function (card, i) {
-        gsap.to(card, {
-          y: i % 2 === 0 ? -50 : 50,
-          ease: 'none',
+      if (isMobile) {
+        /* ── MOBILE: no pin — simple scroll reveals ── */
+        gsap.set('.slogan', { autoAlpha: 0, y: 20 });
+        gsap.to('.slogan', {
+          autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out',
           scrollTrigger: {
             trigger: workSection,
-            start: 'top bottom',
-            end: '+=2400',
-            scrub: 1.5,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
           },
         });
-      });
+        workCards.forEach(function (card) {
+          gsap.fromTo(card,
+            { autoAlpha: 0, y: 40 },
+            {
+              autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 88%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        });
+
+      } else {
+        /* ── DESKTOP: pinned timeline ── */
+        gsap.set(workCards, { autoAlpha: 0 });
+        gsap.set('.slogan', { autoAlpha: 0, y: 30 });
+
+        // Single scrubbed timeline owns the slogan fully — no competing trigger
+        var workTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: workSection,
+            start: 'top top',
+            end: '+=2400',
+            pin: true,
+            scrub: 1.2,
+            anticipatePin: 1,
+          },
+        });
+
+        // Slogan reveals at start of pin, then fades out — all within the scrub
+        workTl.to('.slogan', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+        workTl.to('.slogan', { autoAlpha: 0, y: -40, duration: 1, ease: 'power2.in' });
+
+        // Cards reveal one by one
+        workCards.forEach(function (card) {
+          workTl.to(card, { autoAlpha: 1, duration: 0.7, ease: 'power2.out' }, '>');
+        });
+
+        // Alternating parallax on cards
+        workCards.forEach(function (card, i) {
+          gsap.to(card, {
+            y: i % 2 === 0 ? -50 : 50,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: workSection,
+              start: 'top bottom',
+              end: '+=2400',
+              scrub: 1.5,
+            },
+          });
+        });
+      }
     }
 
     // Hover reveal — image scales up, description overlay slides in
@@ -779,13 +805,13 @@
     ────────────────────────────────────────────── */
     var wNav = document.querySelector('.w-nav');
     if (wNav) {
-      // Webflow sets this nav to position:relative + display:none by default.
-      // Override so it behaves like the fixed sticky nav in the Next.js demo.
-      wNav.style.position = 'fixed';
-      wNav.style.top      = '0';
-      wNav.style.left     = '0';
-      wNav.style.right    = '0';
-      wNav.style.display  = 'block';
+      // Force display:block even if Webflow set display:none (with or without !important)
+      // and ensure fixed positioning matches the Next.js sticky nav.
+      wNav.style.setProperty('display',   'block',  'important');
+      wNav.style.setProperty('position',  'fixed',  'important');
+      wNav.style.setProperty('top',       '0',      'important');
+      wNav.style.setProperty('left',      '0',      'important');
+      wNav.style.setProperty('right',     '0',      'important');
 
       // Start hidden above the viewport (matches Next.js yPercent: -100)
       gsap.set(wNav, { yPercent: -110 });
