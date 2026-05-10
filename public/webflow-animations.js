@@ -264,11 +264,14 @@
             toggleActions: 'play none none reverse',
           },
         });
-        workCards.forEach(function (card) {
+        workCards.forEach(function (card, i) {
+          var img = card.querySelector('.project-img');
+          var startY = i % 2 === 0 ? -50 : 50;
+
           gsap.fromTo(card,
-            { autoAlpha: 0, y: 40 },
+            { autoAlpha: 0, y: startY },
             {
-              autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out',
+              autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out',
               scrollTrigger: {
                 trigger: card,
                 start: 'top 88%',
@@ -276,6 +279,23 @@
               },
             }
           );
+
+          // Inner image parallax — image drifts upward as card scrolls through viewport
+          if (img) {
+            gsap.fromTo(img,
+              { y: 30 },
+              {
+                y: -30,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: card,
+                  start: 'top bottom',
+                  end: 'bottom top',
+                  scrub: 1.5,
+                },
+              }
+            );
+          }
         });
 
       } else {
@@ -299,23 +319,21 @@
         workTl.to('.slogan', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' });
         workTl.to('.slogan', { autoAlpha: 0, y: -40, duration: 1, ease: 'power2.in' });
 
-        // Cards reveal one by one
-        workCards.forEach(function (card) {
-          workTl.to(card, { autoAlpha: 1, duration: 0.7, ease: 'power2.out' }, '>');
-        });
-
-        // Alternating parallax on cards
+        // Cards reveal from alternating depth positions + image inner parallax
         workCards.forEach(function (card, i) {
-          gsap.to(card, {
-            y: i % 2 === 0 ? -50 : 50,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: workSection,
-              start: 'top bottom',
-              end: '+=2400',
-              scrub: 1.5,
-            },
-          });
+          var img    = card.querySelector('.project-img');
+          var startY = i % 2 === 0 ? -60 : 60;
+
+          gsap.set(card, { y: startY }); // staggered start depth
+
+          // Reveal: card slides to y:0 and fades in
+          workTl.to(card, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '>');
+
+          // Image drifts inside the card throughout the pin (runs parallel to reveal)
+          if (img) {
+            gsap.set(img, { y: 25 });
+            workTl.to(img, { y: -25, ease: 'none', duration: 1.5 }, '<');
+          }
         });
       }
     }
