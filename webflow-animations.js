@@ -832,7 +832,7 @@
            .approach-step     3 process columns
            .approach-deco     floating illustration
     ────────────────────────────────────────────── */
-    var approachSection = document.querySelector('.approach-section');
+    var approachSection = document.querySelector('.approach-section, .approach');
     if (approachSection) {
 
       // Heading slides up
