@@ -818,6 +818,124 @@
       }
     }
 
+    /* ══════════════════════════════════════════════
+       ABOUT PAGE SECTIONS
+       These only run if the relevant elements exist,
+       so the script is safe to load on every page.
+    ══════════════════════════════════════════════ */
+
+    /* ──────────────────────────────────────────────
+       A1. OUR APPROACH SECTION
+           .approach-section  wrapper
+           .approach-header   heading
+           .approach-body     paragraph + link
+           .approach-step     3 process columns
+           .approach-deco     floating illustration
+    ────────────────────────────────────────────── */
+    var approachSection = document.querySelector('.approach-section');
+    if (approachSection) {
+
+      // Heading slides up
+      gsap.from('.approach-header', {
+        autoAlpha: 0, y: 32, duration: 0.8, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.approach-header',
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Body + link
+      gsap.from('.approach-body', {
+        autoAlpha: 0, y: 24, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.approach-body',
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Steps stagger in
+      var approachSteps = gsap.utils.toArray('.approach-step');
+      if (approachSteps.length) {
+        gsap.from(approachSteps, {
+          autoAlpha: 0, y: 40, duration: 0.7, stagger: 0.15, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: approachSteps[0],
+            start: 'top 82%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
+
+      // Decorative illustration — infinite float
+      var approachDeco = document.querySelector('.approach-deco');
+      if (approachDeco) {
+        gsap.to(approachDeco, {
+          y: -12, duration: 3, ease: 'sine.inOut', yoyo: true, repeat: -1,
+        });
+      }
+    }
+
+    /* ──────────────────────────────────────────────
+       A2. ABOUT STATS SECTION
+           .about-stats        wrapper
+           .about-photo        full-width team photo
+           .about-stats-header heading row
+           .about-quote        italic quote
+           .about-stat-card    3 stat cards
+    ────────────────────────────────────────────── */
+    var aboutStats = document.querySelector('.about-stats');
+    if (aboutStats) {
+
+      // Team photo parallax
+      var aboutPhoto = aboutStats.querySelector('.about-photo');
+      if (aboutPhoto) {
+        gsap.to(aboutPhoto, {
+          y: -40, ease: 'none',
+          scrollTrigger: {
+            trigger: aboutPhoto,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
+        });
+      }
+
+      // Heading row
+      gsap.from('.about-stats-header', {
+        autoAlpha: 0, y: 32, duration: 0.8, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.about-stats-header',
+          start: 'top 82%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Italic quote
+      gsap.from('.about-quote', {
+        autoAlpha: 0, y: 24, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.about-quote',
+          start: 'top 82%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Stat cards stagger
+      var statCards = gsap.utils.toArray('.about-stat-card');
+      if (statCards.length) {
+        gsap.from(statCards, {
+          autoAlpha: 0, y: 40, duration: 0.7, stagger: 0.15, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.about-stats-grid',
+            start: 'top 82%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
+    }
+
     /* ──────────────────────────────────────────────
        14. SCROLL-UP NAV — hide on scroll-down, show on scroll-up
     ────────────────────────────────────────────── */
