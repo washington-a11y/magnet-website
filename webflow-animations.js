@@ -936,8 +936,87 @@
       }
     }
 
+    /* ══════════════════════════════════════════════
+       WORK PAGE SECTIONS
+       Only run when .works-section exists (work page).
+    ══════════════════════════════════════════════ */
+
+    /* ──────────────────────────────────────────────
+       W1. WORK PAGE — heading + filter pills + cards
+           .works-section    wrapper
+           .works-heading    h2
+           .works-filters    pills container
+           .work-filter-pill individual filter pills
+           .works-grid       3-col masonry grid
+           .work-card        individual project card
+           .work-card-image  image wrapper inside card
+           .work-card-overlay hover overlay
+    ────────────────────────────────────────────── */
+    var worksSection = document.querySelector('.works-section');
+    if (worksSection) {
+
+      // Hide overlays immediately — visible only on hover
+      gsap.set('.work-card-overlay', { autoAlpha: 0 });
+
+      // Heading reveal on scroll
+      var worksHeading = worksSection.querySelector('.works-heading');
+      if (worksHeading) {
+        gsap.from(worksHeading, {
+          autoAlpha: 0, y: 24, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: worksHeading,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
+
+      // Filter pills stagger
+      var filterPills = gsap.utils.toArray('.work-filter-pill');
+      if (filterPills.length) {
+        gsap.from(filterPills, {
+          autoAlpha: 0, y: 16, duration: 0.6, stagger: 0.06, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: worksSection.querySelector('.works-filters') || worksSection,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
+
+      // Work cards scroll reveal — stagger from bottom
+      var workPageCards = gsap.utils.toArray('.work-card');
+      if (workPageCards.length) {
+        gsap.from(workPageCards, {
+          autoAlpha: 0, y: 40, duration: 0.6, stagger: 0.08, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: worksSection.querySelector('.works-grid') || workPageCards[0],
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+
+        // Hover: image scale + overlay reveal per card
+        workPageCards.forEach(function (card) {
+          var img     = card.querySelector('.work-card-image');
+          var overlay = card.querySelector('.work-card-overlay');
+
+          card.addEventListener('mouseenter', function () {
+            if (img)     gsap.to(img,     { scale: 1.05, duration: 0.4, ease: 'power2.out' });
+            if (overlay) gsap.to(overlay, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' });
+          });
+          card.addEventListener('mouseleave', function () {
+            if (img)     gsap.to(img,     { scale: 1,    duration: 0.4, ease: 'power2.out' });
+            if (overlay) gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
+          });
+        });
+      }
+    }
+
     /* ──────────────────────────────────────────────
        14. SCROLL-UP NAV — hide on scroll-down, show on scroll-up
+           On pages with no hero (work page) the nav is
+           always visible and no scroll listener is needed.
     ────────────────────────────────────────────── */
     var wNav = document.querySelector('.w-nav');
     if (wNav) {
@@ -949,30 +1028,36 @@
       wNav.style.setProperty('left',      '0',      'important');
       wNav.style.setProperty('right',     '0',      'important');
 
-      // Start hidden above the viewport (matches Next.js yPercent: -100)
-      gsap.set(wNav, { yPercent: -110 });
-      var navHidden = true;
+      // Work page has no hero — nav should always be visible
+      if (worksSection) {
+        gsap.set(wNav, { yPercent: 0 });
+        // No scroll listener needed — nav stays put
+      } else {
+        // All other pages: start hidden above viewport, reveal on scroll-up
+        gsap.set(wNav, { yPercent: -110 });
+        var navHidden = true;
 
-      lenis.on('scroll', function (e) {
-        var y         = e.scroll;
-        var goingDown = e.direction === 1;
+        lenis.on('scroll', function (e) {
+          var y         = e.scroll;
+          var goingDown = e.direction === 1;
 
-        if (y < 80) {
-          // Near top — keep hidden (hero nav is visible)
-          if (!navHidden) {
+          if (y < 80) {
+            // Near top — keep hidden (hero nav is visible)
+            if (!navHidden) {
+              gsap.to(wNav, { yPercent: -110, duration: 0.35, ease: 'power3.in', overwrite: 'auto' });
+              navHidden = true;
+            }
+          } else if (!goingDown && navHidden) {
+            // Scrolling up — slide in
+            gsap.to(wNav, { yPercent: 0, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+            navHidden = false;
+          } else if (goingDown && !navHidden) {
+            // Scrolling down — slide out
             gsap.to(wNav, { yPercent: -110, duration: 0.35, ease: 'power3.in', overwrite: 'auto' });
             navHidden = true;
           }
-        } else if (!goingDown && navHidden) {
-          // Scrolling up — slide in
-          gsap.to(wNav, { yPercent: 0, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
-          navHidden = false;
-        } else if (goingDown && !navHidden) {
-          // Scrolling down — slide out
-          gsap.to(wNav, { yPercent: -110, duration: 0.35, ease: 'power3.in', overwrite: 'auto' });
-          navHidden = true;
-        }
-      });
+        });
+      }
     }
 
   } // end init()
