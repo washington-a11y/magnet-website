@@ -18,13 +18,21 @@ const NAV_LINKS = [
   { label: "Contact us", href: "/contact" },
 ];
 
-export default function NavScroll() {
+export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: boolean }) {
   const navRef      = useRef<HTMLElement>(null);
   const linksRef    = useRef<HTMLAnchorElement[]>([]);
   const lastScrollY = useRef(0);
   const isVisible   = useRef(false);
 
   useEffect(() => {
+    // ── Always-visible mode (pages with no hero) ──
+    if (alwaysVisible) {
+      gsap.set(navRef.current, { yPercent: 0 });
+      isVisible.current = true;
+      // No scroll listener needed — nav stays put
+      return;
+    }
+
     // ── 1. Hide nav above viewport on mount ──
     gsap.set(navRef.current, { yPercent: -100 });
 
@@ -57,7 +65,6 @@ export default function NavScroll() {
 
     const onScroll = () => {
       if (!pastHero) {
-        // Still inside the hero — keep nav hidden
         lastScrollY.current = window.scrollY;
         return;
       }
@@ -103,7 +110,7 @@ export default function NavScroll() {
       observer.disconnect();
       cleanups.forEach((fn) => fn());
     };
-  }, []);
+  }, [alwaysVisible]);
 
   return (
     <nav
