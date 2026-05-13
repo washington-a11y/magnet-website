@@ -971,9 +971,80 @@
         });
       }
 
-      // Hover: image scale + overlay reveal per card
-      // (No scroll-reveal on cards — Finsweet List Filter handles show/hide)
+      // Animate a set of cards in — clears GSAP props when done so Finsweet can freely show/hide
+      function animateCards(cards) {
+        if (!cards || !cards.length) return;
+        gsap.fromTo(cards,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.5,
+            stagger: 0.07,
+            ease: 'power2.out',
+            onComplete: function () {
+              gsap.set(cards, { clearProps: 'opacity,y' });
+            }
+          }
+        );
+      }
+
+      // Initial page-load card reveal
       var workPageCards = gsap.utils.toArray('.work-card');
+      animateCards(workPageCards);
+
+      // Re-animate after each Finsweet filter change using MutationObserver
+      // Finsweet toggles display:none/block on cards — watch for those changes
+      var listWrapper = worksSection.querySelector('[fs-list-element="list"]') ||
+                        worksSection.querySelector('.works-grid');
+      if (listWrapper) {
+        var filterTimer = null;
+        var observer = new MutationObserver(function (mutations) {
+          // Debounce — Finsweet updates many cards at once
+          clearTimeout(filterTimer);
+          filterTimer = setTimeout(function () {
+            var nowVisible = [...listWrapper.querySelectorAll('.work-card')].filter(function (c) {
+              return getComputedStyle(c).display !== 'none';
+            });
+            animateCards(nowVisible);
+          }, 50);
+        });
+        observer.observe(listWrapper, { subtree: true, attributes: true, attributeFilter: ['style'] });
+      }
+
+      // Active pill state — mirrors the Next.js active filter style
+      // Adds/removes .is-active on the label when a radio is selected
+      var filterForm = worksSection.querySelector('[fs-list-element="filters"]');
+      if (filterForm) {
+        var allPills   = filterForm.querySelectorAll('.work-filter-pill');
+        var clearBtn   = worksSection.querySelector('[fs-list-element="clear"]');
+
+        // Set active class on a pill, remove from all others
+        function setActivePill(activePill) {
+          allPills.forEach(function (p) { p.classList.remove('is-active'); });
+          if (clearBtn) clearBtn.classList.remove('is-active');
+          if (activePill) activePill.classList.add('is-active');
+        }
+
+        // Listen for radio changes inside the form
+        filterForm.addEventListener('change', function (e) {
+          if (e.target.type !== 'radio') return;
+          var label = e.target.closest('.work-filter-pill');
+          setActivePill(label);
+        });
+
+        // Clear / All button resets active state back to clear button
+        if (clearBtn) {
+          clearBtn.addEventListener('click', function () {
+            setActivePill(null);
+            clearBtn.classList.add('is-active');
+          });
+
+          // Mark clear button active on load (default state = all)
+          clearBtn.classList.add('is-active');
+        }
+      }
+
+      // Hover: image scale + overlay reveal per card
       workPageCards.forEach(function (card) {
         var img     = card.querySelector('.work-card-image');
         var overlay = card.querySelector('.work-card-overlay');
