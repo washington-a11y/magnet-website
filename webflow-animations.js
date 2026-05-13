@@ -1063,9 +1063,96 @@
     }
 
     /* ──────────────────────────────────────────────
+       W2. WORK ITEM PAGE — hero, overview, gallery, related
+           .project-hero            full-width hero section
+           .project-hero-image      image wrapper (fade+scale in)
+           .project-overview-left   left col  (slide from left)
+           .project-overview-right  right col (slide from right)
+           .project-gallery-block   each gallery image (fade+slide up)
+           .related-heading         "Related Projects" heading
+           .related-card            each related card
+           .related-card-image      image wrapper inside card
+           .related-card-overlay    hover overlay
+    ────────────────────────────────────────────── */
+    var projectHero = document.querySelector('.project-hero');
+    if (projectHero) {
+
+      // Hero image — fade + scale in on load
+      var heroImg = projectHero.querySelector('.project-hero-image');
+      if (heroImg) {
+        gsap.from(heroImg, {
+          opacity: 0,
+          scale: 1.04,
+          duration: 1.2,
+          ease: 'power3.out',
+          clearProps: 'opacity,scale',
+        });
+      }
+
+      // Overview columns slide in from opposite sides
+      var overviewLeft  = document.querySelector('.project-overview-left');
+      var overviewRight = document.querySelector('.project-overview-right');
+      if (overviewLeft) {
+        gsap.from(overviewLeft, {
+          x: -40, opacity: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: overviewLeft, start: 'top 80%', toggleActions: 'play none none reverse' },
+        });
+      }
+      if (overviewRight) {
+        gsap.from(overviewRight, {
+          x: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: overviewRight, start: 'top 80%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Gallery blocks fade + slide up on scroll
+      gsap.utils.toArray('.project-gallery-block').forEach(function (el) {
+        gsap.from(el, {
+          opacity: 0, y: 48, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      });
+
+      // Related section heading
+      var relatedHeading = document.querySelector('.related-heading');
+      if (relatedHeading) {
+        gsap.from(relatedHeading, {
+          opacity: 0, y: 24, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: relatedHeading, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Related cards stagger in
+      var relatedCards = gsap.utils.toArray('.related-card');
+      if (relatedCards.length) {
+        gsap.from(relatedCards, {
+          opacity: 0, y: 40, duration: 0.6, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: { trigger: '.related-grid', start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Hide related overlays — visible only on hover
+      gsap.set('.related-card-overlay', { autoAlpha: 0 });
+
+      // Related card hover
+      relatedCards.forEach(function (card) {
+        var img     = card.querySelector('.related-card-image');
+        var overlay = card.querySelector('.related-card-overlay');
+        card.addEventListener('mouseenter', function () {
+          if (img)     gsap.to(img,     { scale: 1.05, duration: 0.4, ease: 'power2.out' });
+          if (overlay) gsap.to(overlay, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' });
+        });
+        card.addEventListener('mouseleave', function () {
+          if (img)     gsap.to(img,     { scale: 1,    duration: 0.4, ease: 'power2.out' });
+          if (overlay) gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
+        });
+      });
+    }
+
+    /* ──────────────────────────────────────────────
        14. SCROLL-UP NAV — hide on scroll-down, show on scroll-up
-           On pages with no hero (work page) the nav is
-           always visible and no scroll listener is needed.
+           On pages with no hero (work page + work item page)
+           the nav is always visible and no scroll listener needed.
     ────────────────────────────────────────────── */
     var wNav = document.querySelector('.w-nav');
     if (wNav) {
@@ -1077,8 +1164,8 @@
       wNav.style.setProperty('left',      '0',      'important');
       wNav.style.setProperty('right',     '0',      'important');
 
-      // Work page has no hero — nav should always be visible
-      if (worksSection) {
+      // Work page + work-item page have no scroll-hide hero — nav always visible
+      if (worksSection || projectHero) {
         gsap.set(wNav, { yPercent: 0 });
         // No scroll listener needed — nav stays put
       } else {
