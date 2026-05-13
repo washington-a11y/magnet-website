@@ -25,12 +25,38 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
   const isVisible   = useRef(false);
 
   useEffect(() => {
+    // ── Hover underline animation — runs on ALL pages ──
+    const cleanups: (() => void)[] = [];
+
+    linksRef.current.forEach((anchor) => {
+      if (!anchor) return;
+      const line = anchor.querySelector<HTMLSpanElement>(".nav-underline");
+      if (!line) return;
+
+      gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+
+      const enter = () =>
+        gsap.to(line, { scaleX: 1, duration: 0.3, ease: "power2.out", overwrite: "auto" });
+      const leave = () =>
+        gsap.to(line, {
+          scaleX: 0, duration: 0.25, ease: "power2.in",
+          transformOrigin: "right center", overwrite: "auto",
+          onComplete: () => gsap.set(line, { transformOrigin: "left center" }),
+        });
+
+      anchor.addEventListener("mouseenter", enter);
+      anchor.addEventListener("mouseleave", leave);
+      cleanups.push(() => {
+        anchor.removeEventListener("mouseenter", enter);
+        anchor.removeEventListener("mouseleave", leave);
+      });
+    });
+
     // ── Always-visible mode (pages with no hero) ──
     if (alwaysVisible) {
       gsap.set(navRef.current, { yPercent: 0 });
       isVisible.current = true;
-      // No scroll listener needed — nav stays put
-      return;
+      return () => cleanups.forEach((fn) => fn());
     }
 
     // ── 1. Hide nav above viewport on mount ──
@@ -44,7 +70,6 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
     const observer = new IntersectionObserver(
       ([entry]) => {
         pastHero = !entry.isIntersecting;
-        // Scrolled back up into the hero → force-hide the sticky nav
         if (!pastHero) hide();
       },
       { threshold: 0 }
@@ -69,41 +94,12 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
         return;
       }
       const y = window.scrollY;
-      if (y < lastScrollY.current) {
-        show();
-      } else {
-        hide();
-      }
+      if (y < lastScrollY.current) show();
+      else hide();
       lastScrollY.current = y;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    // ── 3. Hover underline animation ──
-    const cleanups: (() => void)[] = [];
-
-    linksRef.current.forEach((anchor) => {
-      if (!anchor) return;
-      const line = anchor.querySelector<HTMLSpanElement>(".nav-underline");
-      if (!line) return;
-
-      // Initialise: scaleX 0 from the left
-      gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
-
-      const enter = () =>
-        gsap.to(line, { scaleX: 1, duration: 0.3, ease: "power2.out", overwrite: "auto" });
-      const leave = () =>
-        gsap.to(line, { scaleX: 0, duration: 0.25, ease: "power2.in", transformOrigin: "right center", overwrite: "auto",
-          onComplete: () => gsap.set(line, { transformOrigin: "left center" }),
-        });
-
-      anchor.addEventListener("mouseenter", enter);
-      anchor.addEventListener("mouseleave", leave);
-      cleanups.push(() => {
-        anchor.removeEventListener("mouseenter", enter);
-        anchor.removeEventListener("mouseleave", leave);
-      });
-    });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
