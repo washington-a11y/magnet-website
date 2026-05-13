@@ -131,6 +131,18 @@ body {
   overflow: hidden;
 }
 
+/* ─── View Transitions — project image morph ────────── */
+/* Suppress the default full-page cross-fade so only the image morphs */
+::view-transition-old(root) {
+  animation: 220ms ease-out both fade-out;
+}
+::view-transition-new(root) {
+  animation: 220ms 180ms ease-in both fade-in;
+}
+
+@keyframes fade-in  { from { opacity: 0; } }
+@keyframes fade-out { to   { opacity: 0; } }
+
 /* ─── Smooth nav link underline ─────────────────────── */
 .nav-link {
   position: relative;

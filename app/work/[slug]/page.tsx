@@ -40,7 +40,7 @@ export default async function WorkItemPage({
 
       <div className="pt-[61px]">
         {/* 1. Full-width hero image */}
-        <WorkItemHero heroImg={project.heroImg} projectName={project.name} />
+        <WorkItemHero heroImg={project.heroImg} projectName={project.name} slug={project.slug} />
 
         {/* 2. Project overview + gallery */}
         <WorkItemDetail project={project} />

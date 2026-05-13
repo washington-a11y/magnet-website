@@ -971,9 +971,16 @@
         });
       }
 
-      // Animate a set of cards in — clears GSAP props when done so Finsweet can freely show/hide
+      // Re-animate after each Finsweet filter change using MutationObserver
+      var listWrapper = worksSection.querySelector('[fs-list-element="list"]') ||
+                        worksSection.querySelector('.works-grid');
+      var observer = null;
+
+      // Animate a set of cards — disconnects observer first so GSAP's inline
+      // style changes don't re-trigger the observer (infinite loop fix)
       function animateCards(cards) {
         if (!cards || !cards.length) return;
+        if (observer) observer.disconnect();
         gsap.fromTo(cards,
           { opacity: 0, y: 30 },
           {
@@ -983,6 +990,10 @@
             ease: 'power2.out',
             onComplete: function () {
               gsap.set(cards, { clearProps: 'opacity,y' });
+              // Reconnect after GSAP has cleared all inline styles
+              if (observer && listWrapper) {
+                observer.observe(listWrapper, { subtree: true, attributes: true, attributeFilter: ['style'] });
+              }
             }
           }
         );
@@ -992,14 +1003,10 @@
       var workPageCards = gsap.utils.toArray('.work-card');
       animateCards(workPageCards);
 
-      // Re-animate after each Finsweet filter change using MutationObserver
-      // Finsweet toggles display:none/block on cards — watch for those changes
-      var listWrapper = worksSection.querySelector('[fs-list-element="list"]') ||
-                        worksSection.querySelector('.works-grid');
+      // Wire up observer after initial animation
       if (listWrapper) {
         var filterTimer = null;
-        var observer = new MutationObserver(function (mutations) {
-          // Debounce — Finsweet updates many cards at once
+        observer = new MutationObserver(function () {
           clearTimeout(filterTimer);
           filterTimer = setTimeout(function () {
             var nowVisible = [...listWrapper.querySelectorAll('.work-card')].filter(function (c) {
@@ -1008,7 +1015,7 @@
             animateCards(nowVisible);
           }, 50);
         });
-        observer.observe(listWrapper, { subtree: true, attributes: true, attributeFilter: ['style'] });
+        // Observer is connected inside animateCards' onComplete — starts after initial reveal
       }
 
       // Active pill state — mirrors the Next.js active filter style
