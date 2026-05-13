@@ -175,18 +175,6 @@ export default function WorksSection() {
           toggleActions: "play none none reverse",
         },
       });
-      gsap.from(".works-filter-pill", {
-        autoAlpha: 0,
-        y: 16,
-        duration: 0.6,
-        stagger: 0.06,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".works-filters",
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      });
     }, sectionRef);
     return () => ctx.revert();
   }, []);

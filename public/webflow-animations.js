@@ -971,19 +971,6 @@
         });
       }
 
-      // Filter pills stagger
-      var filterPills = gsap.utils.toArray('.work-filter-pill');
-      if (filterPills.length) {
-        gsap.from(filterPills, {
-          autoAlpha: 0, y: 16, duration: 0.6, stagger: 0.06, ease: 'power2.out',
-          scrollTrigger: {
-            trigger: worksSection.querySelector('.works-filters') || worksSection,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        });
-      }
-
       // Work cards scroll reveal — stagger from bottom
       var workPageCards = gsap.utils.toArray('.work-card');
       if (workPageCards.length) {
