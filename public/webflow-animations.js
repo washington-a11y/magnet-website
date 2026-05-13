@@ -992,7 +992,7 @@
               gsap.set(cards, { clearProps: 'opacity,y' });
               // Reconnect after GSAP has cleared all inline styles
               if (observer && listWrapper) {
-                observer.observe(listWrapper, { subtree: true, attributes: true, attributeFilter: ['style'] });
+                observer.observe(listWrapper, { subtree: false, attributes: true, attributeFilter: ['style'] });
               }
             }
           }
