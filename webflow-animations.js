@@ -971,33 +971,22 @@
         });
       }
 
-      // Work cards scroll reveal — stagger from bottom
+      // Hover: image scale + overlay reveal per card
+      // (No scroll-reveal on cards — Finsweet List Filter handles show/hide)
       var workPageCards = gsap.utils.toArray('.work-card');
-      if (workPageCards.length) {
-        gsap.from(workPageCards, {
-          autoAlpha: 0, y: 40, duration: 0.6, stagger: 0.08, ease: 'power2.out',
-          scrollTrigger: {
-            trigger: worksSection.querySelector('.works-grid') || workPageCards[0],
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        });
+      workPageCards.forEach(function (card) {
+        var img     = card.querySelector('.work-card-image');
+        var overlay = card.querySelector('.work-card-overlay');
 
-        // Hover: image scale + overlay reveal per card
-        workPageCards.forEach(function (card) {
-          var img     = card.querySelector('.work-card-image');
-          var overlay = card.querySelector('.work-card-overlay');
-
-          card.addEventListener('mouseenter', function () {
-            if (img)     gsap.to(img,     { scale: 1.05, duration: 0.4, ease: 'power2.out' });
-            if (overlay) gsap.to(overlay, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' });
-          });
-          card.addEventListener('mouseleave', function () {
-            if (img)     gsap.to(img,     { scale: 1,    duration: 0.4, ease: 'power2.out' });
-            if (overlay) gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
-          });
+        card.addEventListener('mouseenter', function () {
+          if (img)     gsap.to(img,     { scale: 1.05, duration: 0.4, ease: 'power2.out' });
+          if (overlay) gsap.to(overlay, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' });
         });
-      }
+        card.addEventListener('mouseleave', function () {
+          if (img)     gsap.to(img,     { scale: 1,    duration: 0.4, ease: 'power2.out' });
+          if (overlay) gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
+        });
+      });
     }
 
     /* ──────────────────────────────────────────────
