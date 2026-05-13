@@ -1039,7 +1039,9 @@
             clearBtn.classList.add('is-active');
           });
 
-          // Mark clear button active on load (default state = all)
+          // On load: clear is-active from all pills first (Webflow Designer leaves combo classes on elements)
+          // then mark only the clear/All button as active
+          allPills.forEach(function (p) { p.classList.remove('is-active'); });
           clearBtn.classList.add('is-active');
         }
       }
