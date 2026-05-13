@@ -1070,6 +1070,83 @@
     }
 
     /* ──────────────────────────────────────────────
+       B2. DESIGN SHIFT BLOG PAGE
+           .blog-header          header row (logo + desc)
+           .blog-header-logo     logo — slides from left
+           .blog-header-desc     description — slides from right
+           .blog-featured        featured post wrapper
+           .blog-featured-image  featured image — scale in
+           .blog-featured-card   overlay card — slides up
+           .blog-grid            card grid wrapper
+           .blog-card            each card — stagger up
+           .blog-card-image      image wrapper inside card (hover scale)
+    ────────────────────────────────────────────── */
+    var blogHeader = document.querySelector('.blog-header');
+    if (blogHeader) {
+
+      // Header: logo from left, desc from right
+      var blogLogo = document.querySelector('.blog-header-logo');
+      var blogDesc = document.querySelector('.blog-header-desc');
+      if (blogLogo) {
+        gsap.from(blogLogo, {
+          x: -40, autoAlpha: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: blogHeader, start: 'top 82%', toggleActions: 'play none none reverse' },
+        });
+      }
+      if (blogDesc) {
+        gsap.from(blogDesc, {
+          x: 40, autoAlpha: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: blogHeader, start: 'top 82%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Featured post: image scales in, card slides up
+      var blogFeatured = document.querySelector('.blog-featured');
+      if (blogFeatured) {
+        var featImg  = blogFeatured.querySelector('.blog-featured-image');
+        var featCard = blogFeatured.querySelector('.blog-featured-card');
+        if (featImg) {
+          gsap.from(featImg, {
+            scale: 1.04, autoAlpha: 0, duration: 1.1, ease: 'power3.out',
+            scrollTrigger: { trigger: blogFeatured, start: 'top 85%', toggleActions: 'play none none reverse' },
+          });
+        }
+        if (featCard) {
+          gsap.from(featCard, {
+            y: 32, autoAlpha: 0, duration: 0.8, ease: 'power2.out',
+            scrollTrigger: { trigger: blogFeatured, start: 'top 80%', toggleActions: 'play none none reverse' },
+          });
+        }
+      }
+
+      // Card grid: stagger up
+      var blogCards = gsap.utils.toArray('.blog-card');
+      if (blogCards.length) {
+        var blogGrid = document.querySelector('.blog-grid');
+        gsap.from(blogCards, {
+          y: 40, autoAlpha: 0, duration: 0.7, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: blogGrid || blogCards[0],
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+
+        // Card hover: image scale
+        blogCards.forEach(function (card) {
+          var img = card.querySelector('.blog-card-image');
+          if (!img) return;
+          card.addEventListener('mouseenter', function () {
+            gsap.to(img, { scale: 1.05, duration: 0.4, ease: 'power2.out' });
+          });
+          card.addEventListener('mouseleave', function () {
+            gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
+          });
+        });
+      }
+    }
+
+    /* ──────────────────────────────────────────────
        W2. WORK ITEM PAGE — hero, overview, gallery, related
            .project-hero            full-width hero section
            .project-hero-image      image wrapper (fade+scale in)
@@ -1172,7 +1249,7 @@
       wNav.style.setProperty('right',     '0',      'important');
 
       // Work page + work-item page have no scroll-hide hero — nav always visible
-      if (worksSection || projectHero) {
+      if (worksSection || projectHero || blogHeader) {
         gsap.set(wNav, { yPercent: 0 });
         // No scroll listener needed — nav stays put
       } else {
