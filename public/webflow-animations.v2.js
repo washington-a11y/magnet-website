@@ -38,13 +38,23 @@
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
-    // After all fonts + images have loaded, recalculate scroll height so
-    // Lenis and ScrollTrigger agree on the full document length.
-    // This fixes the "can't scroll to the bottom" issue caused by late-loading
-    // assets changing the page height after init.
+    // Every time ScrollTrigger rebuilds (e.g. after pinning adds padding-bottom
+    // to the body), tell Lenis to re-measure the true scroll height.
+    // This is the main fix for "can't scroll to the bottom" with pinned sections.
+    ScrollTrigger.addEventListener('refresh', function () { lenis.resize(); });
+
+    // Also refresh on full page load (fonts + images can shift layout)
     window.addEventListener('load', function () {
-      lenis.resize();
       ScrollTrigger.refresh();
+    });
+
+    // And on resize, give the browser a frame to settle before refreshing
+    window.addEventListener('resize', function () {
+      clearTimeout(window._lenisResizeTimer);
+      window._lenisResizeTimer = setTimeout(function () {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      }, 200);
     });
 
     /* ──────────────────────────────────────────────
