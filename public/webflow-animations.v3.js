@@ -801,7 +801,7 @@
       if (footerCols.length) {
         gsap.from(footerCols, {
           autoAlpha: 0,
-          y: 40,
+          y: -30,
           duration: 0.7,
           stagger: 0.1,
           ease: 'power2.out',
@@ -817,7 +817,7 @@
       var footerLogoLetters = footerSection.querySelectorAll('.footer-logo-big .logo-letter');
       if (footerLogoLetters.length) {
         gsap.from(footerLogoLetters, {
-          y: 40,
+          y: -30,
           opacity: 0,
           duration: 0.8,
           stagger: 0.06,
