@@ -1081,22 +1081,23 @@
            .blog-card            each card — stagger up
            .blog-card-image      image wrapper inside card (hover scale)
     ────────────────────────────────────────────── */
-    var blogHeader = document.querySelector('.blog-header');
-    if (blogHeader) {
+    var blogSection = document.querySelector('.blog-section');
+    if (blogSection) {
 
       // Header: logo from left, desc from right
-      var blogLogo = document.querySelector('.blog-header-logo');
-      var blogDesc = document.querySelector('.blog-header-desc');
+      var blogLogo = blogSection.querySelector('.blog-header-logo');
+      var blogDesc = blogSection.querySelector('.blog-header-desc');
+      var headerAnchor = blogLogo || blogSection;
       if (blogLogo) {
         gsap.from(blogLogo, {
           x: -40, autoAlpha: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: blogHeader, start: 'top 82%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: headerAnchor, start: 'top 82%', toggleActions: 'play none none reverse' },
         });
       }
       if (blogDesc) {
         gsap.from(blogDesc, {
           x: 40, autoAlpha: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: blogHeader, start: 'top 82%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: headerAnchor, start: 'top 82%', toggleActions: 'play none none reverse' },
         });
       }
 
@@ -1249,7 +1250,7 @@
       wNav.style.setProperty('right',     '0',      'important');
 
       // Work page + work-item page have no scroll-hide hero — nav always visible
-      if (worksSection || projectHero || blogHeader) {
+      if (worksSection || projectHero || blogSection) {
         gsap.set(wNav, { yPercent: 0 });
         // No scroll listener needed — nav stays put
       } else {
