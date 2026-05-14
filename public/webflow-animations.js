@@ -38,6 +38,15 @@
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
+    // After all fonts + images have loaded, recalculate scroll height so
+    // Lenis and ScrollTrigger agree on the full document length.
+    // This fixes the "can't scroll to the bottom" issue caused by late-loading
+    // assets changing the page height after init.
+    window.addEventListener('load', function () {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    });
+
     /* ──────────────────────────────────────────────
        2. HERO REVEAL
           Webflow classes: .herosection, .menu-item,
