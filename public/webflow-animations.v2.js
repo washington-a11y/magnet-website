@@ -33,22 +33,24 @@
       duration: 1.2,
       easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
       smoothWheel: true,
+      wrapper: window,
+      content: document.documentElement,
     });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
-    // Every time ScrollTrigger rebuilds (e.g. after pinning adds padding-bottom
-    // to the body), tell Lenis to re-measure the true scroll height.
-    // This is the main fix for "can't scroll to the bottom" with pinned sections.
+    // Re-measure scroll height every time ScrollTrigger rebuilds its positions
+    // (pinned sections add padding-bottom AFTER Lenis first measures the page).
     ScrollTrigger.addEventListener('refresh', function () { lenis.resize(); });
 
-    // Also refresh on full page load (fonts + images can shift layout)
+    // Full page load: fonts + images can shift layout after DOMContentLoaded
     window.addEventListener('load', function () {
+      lenis.resize();
       ScrollTrigger.refresh();
     });
 
-    // And on resize, give the browser a frame to settle before refreshing
+    // Viewport resize: debounced so we don't thrash
     window.addEventListener('resize', function () {
       clearTimeout(window._lenisResizeTimer);
       window._lenisResizeTimer = setTimeout(function () {
@@ -56,6 +58,11 @@
         ScrollTrigger.refresh();
       }, 200);
     });
+
+    // Safety net: force a resize + refresh 1s and 3s after init
+    // catches any late-loading assets that push page height after load fires
+    setTimeout(function () { lenis.resize(); ScrollTrigger.refresh(); }, 1000);
+    setTimeout(function () { lenis.resize(); ScrollTrigger.refresh(); }, 3000);
 
     /* ──────────────────────────────────────────────
        2. HERO REVEAL
