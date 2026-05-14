@@ -60,9 +60,23 @@
     });
 
     // Safety net: force a resize + refresh 1s and 3s after init
-    // catches any late-loading assets that push page height after load fires
     setTimeout(function () { lenis.resize(); ScrollTrigger.refresh(); }, 1000);
     setTimeout(function () { lenis.resize(); ScrollTrigger.refresh(); }, 3000);
+
+    // ResizeObserver: fires instantly whenever body height changes (images,
+    // fonts, Webflow content) — most reliable way to keep Lenis in sync
+    if (typeof ResizeObserver !== 'undefined') {
+      var _lenisPrevHeight = document.body.scrollHeight;
+      var _lenisRO = new ResizeObserver(function () {
+        var newHeight = document.body.scrollHeight;
+        if (newHeight !== _lenisPrevHeight) {
+          _lenisPrevHeight = newHeight;
+          lenis.resize();
+          ScrollTrigger.refresh();
+        }
+      });
+      _lenisRO.observe(document.body);
+    }
 
     /* ──────────────────────────────────────────────
        2. HERO REVEAL
