@@ -1272,6 +1272,83 @@
           });
         });
       }
+
+      // ── Share buttons
+      // Add data-share="x|linkedin|facebook|copy" to each .post-share-icon in Webflow
+      var sharePlatforms = {
+        x:        function (url, title) { return 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(title); },
+        linkedin: function (url)        { return 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url); },
+        facebook: function (url)        { return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url); },
+        copy:     null, // handled separately
+      };
+
+      var shareLabels = { x: 'Share on X', linkedin: 'Share on LinkedIn', facebook: 'Share on Facebook', copy: 'Copy link' };
+
+      document.querySelectorAll('[data-share]').forEach(function (btn) {
+        var platform = btn.getAttribute('data-share');
+
+        // Inject tooltip
+        var tooltip = document.createElement('div');
+        tooltip.textContent = shareLabels[platform] || platform;
+        tooltip.style.cssText = [
+          'position:absolute',
+          'bottom:calc(100% + 8px)',
+          'left:50%',
+          'transform:translateX(-50%)',
+          'background:#111921',
+          'color:#fafafa',
+          'font-size:12px',
+          'white-space:nowrap',
+          'padding:5px 10px',
+          'border-radius:4px',
+          'pointer-events:none',
+          'opacity:0',
+          'transition:opacity 0.2s',
+          'z-index:10',
+        ].join(';');
+
+        // Arrow
+        var arrow = document.createElement('div');
+        arrow.style.cssText = [
+          'position:absolute',
+          'top:100%',
+          'left:50%',
+          'transform:translateX(-50%)',
+          'border:4px solid transparent',
+          'border-top-color:#111921',
+        ].join(';');
+        tooltip.appendChild(arrow);
+
+        // Wrap button in relative container for tooltip positioning
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'position:relative;display:inline-flex;';
+        btn.parentNode.insertBefore(wrap, btn);
+        wrap.appendChild(btn);
+        wrap.appendChild(tooltip);
+
+        wrap.addEventListener('mouseenter', function () { tooltip.style.opacity = '1'; });
+        wrap.addEventListener('mouseleave', function () { tooltip.style.opacity = '0'; });
+
+        // Click handler
+        btn.style.cursor = 'pointer';
+        btn.addEventListener('click', function () {
+          var url   = window.location.href;
+          var title = document.title;
+
+          if (platform === 'copy') {
+            navigator.clipboard.writeText(url).then(function () {
+              var prev = tooltip.firstChild.textContent;
+              tooltip.firstChild.textContent = 'Copied!';
+              setTimeout(function () { tooltip.firstChild.textContent = prev; }, 2000);
+            });
+            return;
+          }
+
+          if (sharePlatforms[platform]) {
+            window.open(sharePlatforms[platform](url, title), '_blank', 'width=600,height=500,noopener,noreferrer');
+          }
+        });
+      });
     }
 
     /* ──────────────────────────────────────────────
