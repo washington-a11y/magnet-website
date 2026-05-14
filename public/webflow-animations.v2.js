@@ -1148,6 +1148,124 @@
     }
 
     /* ──────────────────────────────────────────────
+       B3. BLOG POST PAGE
+           .post-hero            page identifier + hero wrapper
+           .post-hero-image      hero image  (scale+fade on load)
+           .post-hero-card       overlay title card (slide up on load)
+           .post-quote           quote block (fade+slide up)
+           .post-body            rich text blocks (fade+slide up)
+           .post-subscribe       newsletter form (fade+slide up)
+           .post-callout         conclusion block (fade+slide up)
+           .post-share           share row (fade+slide up)
+           .post-related-heading "Related articles" heading
+           .post-related-grid    related cards wrapper
+           .post-related-card    each related card (stagger up)
+           .post-related-image   image inside card (hover scale)
+    ────────────────────────────────────────────── */
+    var postHero = document.querySelector('.post-hero');
+    if (postHero) {
+
+      // Hero image — scale + fade on load
+      var postHeroImg = postHero.querySelector('.post-hero-image');
+      if (postHeroImg) {
+        gsap.from(postHeroImg, {
+          scale: 1.04, autoAlpha: 0, duration: 1.2, ease: 'power3.out',
+          clearProps: 'opacity,scale',
+        });
+      }
+
+      // Hero card — slide up on load
+      var postHeroCard = postHero.querySelector('.post-hero-card');
+      if (postHeroCard) {
+        gsap.from(postHeroCard, {
+          y: 32, autoAlpha: 0, duration: 0.8, delay: 0.3, ease: 'power2.out',
+          clearProps: 'opacity,y',
+        });
+      }
+
+      // Quote block
+      var postQuote = document.querySelector('.post-quote');
+      if (postQuote) {
+        gsap.from(postQuote, {
+          y: 32, autoAlpha: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: postQuote, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Body blocks stagger
+      var postBodies = gsap.utils.toArray('.post-body');
+      if (postBodies.length) {
+        postBodies.forEach(function (block) {
+          gsap.from(block, {
+            y: 24, autoAlpha: 0, duration: 0.7, ease: 'power2.out',
+            scrollTrigger: { trigger: block, start: 'top 85%', toggleActions: 'play none none reverse' },
+          });
+        });
+      }
+
+      // Subscribe block
+      var postSubscribe = document.querySelector('.post-subscribe');
+      if (postSubscribe) {
+        gsap.from(postSubscribe, {
+          y: 24, autoAlpha: 0, duration: 0.7, ease: 'power2.out',
+          scrollTrigger: { trigger: postSubscribe, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Callout / conclusion
+      var postCallout = document.querySelector('.post-callout');
+      if (postCallout) {
+        gsap.from(postCallout, {
+          y: 24, autoAlpha: 0, duration: 0.7, ease: 'power2.out',
+          scrollTrigger: { trigger: postCallout, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Share row
+      var postShare = document.querySelector('.post-share');
+      if (postShare) {
+        gsap.from(postShare, {
+          y: 24, autoAlpha: 0, duration: 0.7, ease: 'power2.out',
+          scrollTrigger: { trigger: postShare, start: 'top 88%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Related heading
+      var postRelatedHeading = document.querySelector('.post-related-heading');
+      if (postRelatedHeading) {
+        gsap.from(postRelatedHeading, {
+          y: 24, autoAlpha: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: postRelatedHeading, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+      }
+
+      // Related cards stagger + hover
+      var postRelatedCards = gsap.utils.toArray('.post-related-card');
+      if (postRelatedCards.length) {
+        var postRelatedGrid = document.querySelector('.post-related-grid');
+        gsap.from(postRelatedCards, {
+          y: 40, autoAlpha: 0, duration: 0.7, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: postRelatedGrid || postRelatedCards[0],
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+
+        postRelatedCards.forEach(function (card) {
+          var img = card.querySelector('.post-related-image');
+          if (!img) return;
+          card.addEventListener('mouseenter', function () {
+            gsap.to(img, { scale: 1.05, duration: 0.4, ease: 'power2.out' });
+          });
+          card.addEventListener('mouseleave', function () {
+            gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
+          });
+        });
+      }
+    }
+
+    /* ──────────────────────────────────────────────
        W2. WORK ITEM PAGE — hero, overview, gallery, related
            .project-hero            full-width hero section
            .project-hero-image      image wrapper (fade+scale in)
@@ -1250,7 +1368,7 @@
       wNav.style.setProperty('right',     '0',      'important');
 
       // Work page + work-item page have no scroll-hide hero — nav always visible
-      if (worksSection || projectHero || blogSection) {
+      if (worksSection || projectHero || blogSection || postHero) {
         gsap.set(wNav, { yPercent: 0 });
         // No scroll listener needed — nav stays put
       } else {
