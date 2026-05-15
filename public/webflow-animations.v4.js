@@ -188,6 +188,17 @@
     }
 
     /* ──────────────────────────────────────────────
+       0b. KILL WEBFLOW IX2 SCROLL HANDLING
+           Webflow's Interactions 2.0 registers its own
+           scroll listener that fights Lenis. Destroy it
+           before Lenis initialises.
+    ────────────────────────────────────────────── */
+    try {
+      var wfIX2 = window.Webflow && window.Webflow.require('ix2');
+      if (wfIX2 && typeof wfIX2.destroy === 'function') wfIX2.destroy();
+    } catch (e) { /* ignore */ }
+
+    /* ──────────────────────────────────────────────
        1. LENIS SMOOTH SCROLL
     ────────────────────────────────────────────── */
     var lenis = new Lenis({
@@ -337,8 +348,8 @@
           start: 'top top',
           end: '+=800',
           pin: true,
-          scrub: 1.5,
-          anticipatePin: 1,
+          pinSpacing: false, // hero is already position:fixed — don't add spacer height
+          scrub: true,       // no lag; Lenis handles all smoothing
         },
       });
 
@@ -429,7 +440,7 @@
           if (img) {
             gsap.fromTo(img, { y: 30 }, {
               y: -30, ease: 'none',
-              scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: 1.5 },
+              scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true },
             });
           }
         });
@@ -440,7 +451,7 @@
         var workTl = gsap.timeline({
           scrollTrigger: {
             trigger: workSection, start: 'top top', end: '+=2400',
-            pin: true, scrub: 1.2, anticipatePin: 1,
+            pin: true, scrub: true, // no lag — Lenis handles all smoothing
           },
         });
 
@@ -496,7 +507,7 @@
       if (img) {
         gsap.to(img, {
           y: -30, ease: 'none',
-          scrollTrigger: { trigger: row, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+          scrollTrigger: { trigger: row, start: 'top bottom', end: 'bottom top', scrub: true },
         });
       }
     });
@@ -830,7 +841,7 @@
       if (aboutPhoto) {
         gsap.to(aboutPhoto, {
           y: -40, ease: 'none',
-          scrollTrigger: { trigger: aboutPhoto, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+          scrollTrigger: { trigger: aboutPhoto, start: 'top bottom', end: 'bottom top', scrub: true },
         });
       }
 

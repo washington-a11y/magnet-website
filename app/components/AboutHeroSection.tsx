@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { PAGE_REVEAL_DELAY } from "./TransitionContext";
 
 // Same SVG assets as HeroSection
 const imgVectorM = "/assets/5bf92d92120899ea625773fc465a6a74df5decfa.svg";
@@ -20,7 +21,7 @@ export default function AboutHeroSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const tl = gsap.timeline({ delay: PAGE_REVEAL_DELAY, defaults: { ease: "power3.out" } });
 
       // Same sequence as HeroSection — nav down, logo fan-in, bottom row up
       tl.from(".nav-item", {

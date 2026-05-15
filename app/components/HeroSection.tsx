@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { PAGE_REVEAL_DELAY } from "./TransitionContext";
 
 const imgVectorM   = "/assets/5bf92d92120899ea625773fc465a6a74df5decfa.svg";
 const imgVectorA   = "/assets/36dfdab13d470f1cedc8845d1a22a5425beed4ff.svg";
@@ -37,11 +38,10 @@ export default function HeroSection() {
       gsap.set(videoBox,    { scale: 0.94, opacity: 0 });
 
       // ── 2. Main reveal timeline ──
-      // Delay 0.85s — waits for the PageIntro curtain to finish its wipe
-      // (curtain: 0.1s hold + 0.9s slide = 1.0s total, but curtain reveals
-      // the hero mid-wipe so 0.7s feels right to start the orchestration)
+      // Wait for all 3 transition panels to fully clear before starting
+      // (PAGE_REVEAL_DELAY = panel total ~0.96s + 0.15s breathing pause)
       const tl = gsap.timeline({
-        delay: 0.75,
+        delay: PAGE_REVEAL_DELAY,
         defaults: { ease: "expo.out" },
       });
 
