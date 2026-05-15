@@ -22,21 +22,20 @@
      Panels cover the page from the very first paint so there's no flash
      of content. GSAP animates them away once it's ready in init().       */
   var _PANEL_COLORS = ['#111921', '#FDC6EC', '#FFF085'];
-  var _overlay = document.createElement('div');
-  _overlay.style.cssText = [
-    'position:fixed', 'top:0', 'left:0', 'width:100%', 'height:100%',
-    'z-index:99999', 'pointer-events:none',
-  ].join(';');
-
-  // Each panel is full-screen and stacked — they peel away one by one via yPercent
+  // Give each panel its own position:fixed so it's always relative to the viewport,
+  // regardless of any transform on <html> or <body> that Webflow/Lenis may apply.
+  var _overlay = { children: [] };
   _PANEL_COLORS.forEach(function (color) {
     var p = document.createElement('div');
-    p.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;background:' + color + ';will-change:transform;';
-    _overlay.appendChild(p);
+    p.style.cssText = [
+      'position:fixed', 'top:0', 'left:0', 'width:100vw', 'height:100vh',
+      'background:' + color, 'will-change:transform', 'z-index:99999',
+      'pointer-events:none',
+    ].join(';');
+    _overlay.children.push(p);
+    // Append to body if ready, otherwise to documentElement as fallback
+    (document.body || document.documentElement).appendChild(p);
   });
-
-  // Append to <html> immediately — works even before <body> exists
-  (document.documentElement || document.body).appendChild(_overlay);
 
   /* ── Script loader ── */
   function loadScript(src) {
@@ -67,8 +66,12 @@
           Entry: panels cover screen on load → slide off upward
           Exit:  panels sweep up from below → navigate on complete
     ────────────────────────────────────────────── */
-    // Reuse the overlay injected at the top of the IIFE (already visible on screen)
-    var transitionPanels = Array.prototype.slice.call(_overlay.children);
+    // Each panel was injected individually at IIFE top — grab them all
+    var transitionPanels = _overlay.children; // plain array
+
+    function setPanelPointerEvents(v) {
+      transitionPanels.forEach(function (p) { p.style.pointerEvents = v; });
+    }
 
     // Entry reveal — panels are covering, slide off upward (stagger from right)
     gsap.set(transitionPanels, { yPercent: 0 });
@@ -79,7 +82,7 @@
       stagger: { each: 0.08, from: 'end' },
       delay: 0.05,
       onComplete: function () {
-        _overlay.style.pointerEvents = 'none';
+        setPanelPointerEvents('none');
       },
     });
 
@@ -102,9 +105,9 @@
 
       e.preventDefault();
       _transitioning = true;
-      _overlay.style.pointerEvents = 'all';
+      setPanelPointerEvents('all');
 
-      // Stop Lenis so it doesn't fight the fixed overlay
+      // Stop Lenis so it doesn't fight the overlay
       if (typeof lenis !== 'undefined') lenis.stop();
 
       gsap.fromTo(transitionPanels,
