@@ -25,12 +25,13 @@
   var _overlay = document.createElement('div');
   _overlay.style.cssText = [
     'position:fixed', 'top:0', 'left:0', 'width:100%', 'height:100%',
-    'z-index:99999', 'display:flex', 'pointer-events:none',
+    'z-index:99999', 'pointer-events:none',
   ].join(';');
 
+  // Each panel is full-screen and stacked — they peel away one by one via yPercent
   _PANEL_COLORS.forEach(function (color) {
     var p = document.createElement('div');
-    p.style.cssText = 'flex:1;height:100%;background:' + color + ';will-change:transform;';
+    p.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;background:' + color + ';will-change:transform;';
     _overlay.appendChild(p);
   });
 
