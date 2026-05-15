@@ -18,6 +18,25 @@
 (function () {
   'use strict';
 
+  /* ── TRANSITION PANELS — injected immediately, before any script loads ──
+     Panels cover the page from the very first paint so there's no flash
+     of content. GSAP animates them away once it's ready in init().       */
+  var _PANEL_COLORS = ['#111921', '#FDC6EC', '#FFF085'];
+  var _overlay = document.createElement('div');
+  _overlay.style.cssText = [
+    'position:fixed', 'top:0', 'left:0', 'width:100%', 'height:100%',
+    'z-index:99999', 'display:flex', 'pointer-events:none',
+  ].join(';');
+
+  _PANEL_COLORS.forEach(function (color) {
+    var p = document.createElement('div');
+    p.style.cssText = 'flex:1;height:100%;background:' + color + ';will-change:transform;';
+    _overlay.appendChild(p);
+  });
+
+  // Append to <html> immediately — works even before <body> exists
+  (document.documentElement || document.body).appendChild(_overlay);
+
   /* ── Script loader ── */
   function loadScript(src) {
     return new Promise(function (resolve) {
@@ -37,6 +56,69 @@
     if (!gsap || !ScrollTrigger || !Lenis) return;
 
     gsap.registerPlugin(ScrollTrigger);
+
+    /* ──────────────────────────────────────────────
+       0. PAGE TRANSITIONS — 3-panel curtain
+          Colors match the Next.js TransitionOverlay:
+            Panel 1: #111921 (dark)
+            Panel 2: #FDC6EC (pink)
+            Panel 3: #FFF085 (yellow)
+          Entry: panels cover screen on load → slide off upward
+          Exit:  panels sweep up from below → navigate on complete
+    ────────────────────────────────────────────── */
+    // Reuse the overlay injected at the top of the IIFE (already visible on screen)
+    var transitionPanels = Array.prototype.slice.call(_overlay.children);
+
+    // Entry reveal — panels are covering, slide off upward (stagger from right)
+    gsap.set(transitionPanels, { yPercent: 0 });
+    gsap.to(transitionPanels, {
+      yPercent: -100,
+      duration: 0.75,
+      ease: 'power4.inOut',
+      stagger: { each: 0.08, from: 'end' },
+      delay: 0.05,
+      onComplete: function () {
+        _overlay.style.pointerEvents = 'none';
+      },
+    });
+
+    // Exit — intercept internal link clicks, play cover then navigate
+    var _transitioning = false;
+    document.addEventListener('click', function (e) {
+      var anchor = e.target.closest('a');
+      if (!anchor) return;
+
+      var href = anchor.getAttribute('href');
+      if (!href) return;
+
+      // Skip: external, hash-only, mailto/tel, new tab
+      var isExternal = anchor.hostname && anchor.hostname !== window.location.hostname;
+      var isHash     = href.charAt(0) === '#';
+      var isSpecial  = /^(mailto|tel):/.test(href);
+      var isNewTab   = anchor.target === '_blank';
+      if (isExternal || isHash || isSpecial || isNewTab) return;
+      if (_transitioning) return;
+
+      e.preventDefault();
+      _transitioning = true;
+      _overlay.style.pointerEvents = 'all';
+
+      // Stop Lenis so it doesn't fight the fixed overlay
+      if (typeof lenis !== 'undefined') lenis.stop();
+
+      gsap.fromTo(transitionPanels,
+        { yPercent: 100 },
+        {
+          yPercent: 0,
+          duration: 0.55,
+          ease: 'power4.inOut',
+          stagger: 0.07,
+          onComplete: function () {
+            window.location.href = href;
+          },
+        }
+      );
+    });
 
     /* ──────────────────────────────────────────────
        UTILITIES — word-split clip-emerge
@@ -105,9 +187,18 @@
        1. LENIS SMOOTH SCROLL
     ────────────────────────────────────────────── */
     var lenis = new Lenis({
-      duration: 1.2,
-      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      // Lower duration = snappier stop, less "float" after you release the wheel
+      duration: 0.9,
+      // Expo-out curve: fast start, very soft landing — removes the snap at stop
+      easing: function (t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      },
       smoothWheel: true,
+      // Slightly reduced multiplier so each tick travels less distance,
+      // which gives the easing more room to breathe at the end
+      wheelMultiplier: 0.85,
+      touchMultiplier: 1.5,
+      infinite: false,
       wrapper: window,
       content: document.documentElement,
     });
