@@ -49,8 +49,23 @@ export default function WorkSection() {
     const ctx = gsap.context(() => {
       const cards = gsap.utils.toArray<HTMLElement>(".work-image");
 
-      // ── 1. Hide all cards on load ──
+      // ── 1. Hide all cards and headline words on load ──
       gsap.set(cards, { autoAlpha: 0 });
+      gsap.set(".work-headline-word", { y: "110%", opacity: 0 });
+
+      // ── 1b. Headline words stagger in when section enters view ──
+      gsap.to(".work-headline-word", {
+        y: "0%",
+        opacity: 1,
+        duration: 0.75,
+        stagger: 0.09,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      });
 
       // ── 2. Pinned scroll timeline ──
       // Section pins at the top of the viewport.
@@ -114,26 +129,30 @@ export default function WorkSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-[#f9faff] px-[32px] py-[32px]"
+      className="relative z-20 w-full bg-[#f9faff] px-[32px] py-[32px]"
       style={{ minHeight: "1200px" }}
     >
       {/* Sub-headline */}
-      <div className="work-headline absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-10 whitespace-nowrap">
-        <p className="text-[31px] text-[#111921]">
-          <span className="work-headline-word font-['Neue_Haas_Grotesk_Text_Pro',sans-serif]">
+      <h2 className="work-headline absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-10 whitespace-nowrap">
+        <span className="block text-[31px] text-[#111921]" style={{ overflow: "hidden" }}>
+          <span className="work-headline-word font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] inline-block">
             Building
           </span>{" "}
-          <span className="work-headline-word font-['Gyst_Variable',sans-serif] italic">
+          <span className="work-headline-word font-['Gyst_Variable',sans-serif] italic inline-block">
             Brands
           </span>
-        </p>
-        <p className="work-headline-word font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[31px] text-[#111921] leading-snug">
-          For The Modern World
-        </p>
-        <p className="work-headline-word font-['Gyst_Variable',sans-serif] italic text-[31px] text-[#111921]">
-          Since 2018
-        </p>
-      </div>
+        </span>
+        <span className="block" style={{ overflow: "hidden" }}>
+          <span className="work-headline-word font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[31px] text-[#111921] leading-snug inline-block">
+            For The Modern World
+          </span>
+        </span>
+        <span className="block" style={{ overflow: "hidden" }}>
+          <span className="work-headline-word font-['Gyst_Variable',sans-serif] italic text-[31px] text-[#111921] inline-block">
+            Since 2018
+          </span>
+        </span>
+      </h2>
 
       {/* Image grid */}
       <div

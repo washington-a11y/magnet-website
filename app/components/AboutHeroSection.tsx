@@ -90,9 +90,9 @@ export default function AboutHeroSection() {
       <div className="flex items-end justify-between w-full">
         {/* Tagline — same style as home */}
         <div ref={heroTextRef}>
-          <p className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[48px] uppercase text-[#fafafa] leading-tight max-w-[746px]">
+          <h1 className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[48px] uppercase text-[#fafafa] leading-tight max-w-[746px]">
             Your design partner
-          </p>
+          </h1>
         </div>
 
         {/* Description paragraph — replaces the video box */}

@@ -6,14 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Logo letters (same as hero)
-const imgVectorM = "/assets/74eedc4876e73c3efff47e73a1ab172fcf2345f0.svg";
-const imgVectorA = "/assets/832b31364304dc024a9d95606cc195f0c6d867fa.svg";
-const imgVectorG = "/assets/f396358826920d0fcfe97c1734fcc79e717e1ab6.svg";
-const imgVectorN = "/assets/09c6e3847c2a9da11f17d5976e22d9e379752999.svg";
-const imgVectorE = "/assets/d376bbfaf87b16b9f1819c6e1f2cbaa6e67ff3a7.svg";
-const imgVectorT = "/assets/c7d13a0a8c7c53f021e0ca1578dd61043a8ad36b.svg";
-const imgArrow   = "/assets/714abcd3e8cb1f8571b281786c0effc8828750fa.svg";
+const imgVectorM  = "/assets/74eedc4876e73c3efff47e73a1ab172fcf2345f0.svg";
+const imgVectorA  = "/assets/832b31364304dc024a9d95606cc195f0c6d867fa.svg";
+const imgVectorG  = "/assets/f396358826920d0fcfe97c1734fcc79e717e1ab6.svg";
+const imgVectorN  = "/assets/09c6e3847c2a9da11f17d5976e22d9e379752999.svg";
+const imgVectorE  = "/assets/d376bbfaf87b16b9f1819c6e1f2cbaa6e67ff3a7.svg";
+const imgVectorT  = "/assets/c7d13a0a8c7c53f021e0ca1578dd61043a8ad36b.svg";
+const imgArrow    = "/assets/714abcd3e8cb1f8571b281786c0effc8828750fa.svg";
 const imgPlusIcon = "/assets/34a5f835f54ad0f8263cebeded849b7f8f78548d.svg";
 
 const FOOTER_MARQUEE =
@@ -21,22 +20,21 @@ const FOOTER_MARQUEE =
 
 const NAV_LINKS = ["Home", "Work", "Services", "About", "Contact us"];
 const SOCIAL = [
-  { name: "Dribbble",  href: "#" },
-  { name: "Behance",   href: "#" },
-  { name: "LinkedIn",  href: "#" },
+  { name: "Dribbble", href: "#" },
+  { name: "Behance",  href: "#" },
+  { name: "LinkedIn", href: "#" },
 ];
 
 export default function Footer() {
-  const footerRef    = useRef<HTMLElement>(null);
-  const marqueeRef   = useRef<HTMLDivElement>(null);
-  const logoRef      = useRef<HTMLDivElement>(null);
+  const footerRef  = useRef<HTMLElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const logoRef    = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Marquee scroll
-      const track = marqueeRef.current;
-      if (track) {
-        gsap.to(track, {
+      // ── Marquee ──
+      if (marqueeRef.current) {
+        gsap.to(marqueeRef.current, {
           x: "-50%",
           duration: 80,
           ease: "none",
@@ -44,7 +42,7 @@ export default function Footer() {
         });
       }
 
-      // Footer logo letters fan in on scroll
+      // ── Footer logo letters fan in ──
       gsap.from(".footer-logo-letter", {
         y: 60,
         opacity: 0,
@@ -56,6 +54,30 @@ export default function Footer() {
           start: "top 90%",
           toggleActions: "play none none reverse",
         },
+      });
+
+      // ── Underline hover — same mechanic as NavScroll ──
+      const links = gsap.utils.toArray<HTMLElement>(".footer-anim-link");
+      links.forEach((link) => {
+        const line = link.querySelector<HTMLElement>(".footer-underline");
+        if (!line) return;
+
+        gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+
+        const enter = () =>
+          gsap.to(line, { scaleX: 1, duration: 0.3, ease: "power2.out", overwrite: "auto" });
+        const leave = () =>
+          gsap.to(line, {
+            scaleX: 0,
+            duration: 0.25,
+            ease: "power2.in",
+            transformOrigin: "right center",
+            overwrite: "auto",
+            onComplete: () => gsap.set(line, { transformOrigin: "left center" }),
+          });
+
+        link.addEventListener("mouseenter", enter);
+        link.addEventListener("mouseleave", leave);
       });
     }, footerRef);
 
@@ -69,10 +91,7 @@ export default function Footer() {
     >
       {/* ── Marquee strip ── */}
       <div className="w-full overflow-hidden py-[10px]">
-        <div
-          ref={marqueeRef}
-          className="flex w-max"
-        >
+        <div ref={marqueeRef} className="flex w-max">
           {[FOOTER_MARQUEE, FOOTER_MARQUEE].map((text, i) => (
             <p
               key={i}
@@ -86,6 +105,7 @@ export default function Footer() {
 
       {/* ── Footer columns ── */}
       <div className="flex gap-[32px] items-start w-full">
+
         {/* Newsletter */}
         <div
           className="flex flex-col gap-[32px] border-b border-[rgba(250,250,250,0.3)] pb-[10px]"
@@ -109,9 +129,10 @@ export default function Footer() {
             <div key={link} className="flex items-center gap-[8px]">
               <a
                 href={`#${link.toLowerCase().replace(" ", "-")}`}
-                className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] font-medium text-[16px] text-[#fafafa] uppercase leading-[1.5] hover:opacity-70 transition-opacity"
+                className="footer-anim-link relative inline-block font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] font-medium text-[16px] text-[#fafafa] uppercase leading-[1.5] pb-[1px]"
               >
                 {link}
+                <span className="footer-underline absolute bottom-0 left-0 w-full h-[1px] bg-[#fafafa] block" />
               </a>
               {link === "Services" && (
                 <img src={imgPlusIcon} alt="" className="w-[16px] h-[16px]" />
@@ -127,9 +148,10 @@ export default function Footer() {
           </p>
           <a
             href="mailto:sales@magnetstudio.ca"
-            className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[19px] text-[#fafafa] leading-[1.2] hover:opacity-70 transition-opacity"
+            className="footer-anim-link relative inline-block font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[19px] text-[#fafafa] leading-[1.2] pb-[1px]"
           >
             sales@magnetstudio.ca
+            <span className="footer-underline absolute bottom-0 left-0 w-full h-[1px] bg-[#fafafa] block" />
           </a>
         </div>
 
@@ -142,7 +164,7 @@ export default function Footer() {
             <a
               key={name}
               href={href}
-              className="flex items-center gap-1 group"
+              className="footer-anim-link relative inline-flex items-center gap-1 pb-[1px] w-fit"
             >
               <span className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[19px] text-[#fafafa] leading-[31px]">
                 {name}
@@ -150,8 +172,9 @@ export default function Footer() {
               <img
                 src={imgArrow}
                 alt=""
-                className="w-[30px] h-[30px] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                className="w-[30px] h-[30px]"
               />
+              <span className="footer-underline absolute bottom-0 left-0 w-full h-[1px] bg-[#fafafa] block" />
             </a>
           ))}
         </div>
@@ -170,9 +193,10 @@ export default function Footer() {
                 <a
                   key={t}
                   href="#"
-                  className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] font-medium text-[16px] text-[#fafafa] uppercase leading-[1.5] hover:opacity-70 transition-opacity"
+                  className="footer-anim-link relative inline-block font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] font-medium text-[16px] text-[#fafafa] uppercase leading-[1.5] pb-[1px]"
                 >
                   {t}
+                  <span className="footer-underline absolute bottom-0 left-0 w-full h-[1px] bg-[#fafafa] block" />
                 </a>
               ))}
             </div>
@@ -185,24 +209,18 @@ export default function Footer() {
           className="relative w-full shrink-0 overflow-hidden"
           style={{ aspectRatio: "1229 / 165" }}
         >
-          <div className="footer-logo-letter absolute" style={{ inset: "2.1% 81.04% 2.5% 0" }}>
-            <img src={imgVectorM} alt="M" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
-          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 63.09% 1.93% 20.03%" }}>
-            <img src={imgVectorA} alt="A" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
-          <div className="footer-logo-letter absolute" style={{ inset: "0 46.8% 0 36.36%" }}>
-            <img src={imgVectorG} alt="G" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
-          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 30.12% 2.5% 54.39%" }}>
-            <img src={imgVectorN} alt="N" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
-          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 15.44% 2.47% 71.1%" }}>
-            <img src={imgVectorE} alt="E" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
-          <div className="footer-logo-letter absolute" style={{ inset: "2.5% 0 1.93% 86.19%" }}>
-            <img src={imgVectorT} alt="T" className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
-          </div>
+          {[
+            { letter: "M", img: imgVectorM, style: { inset: "2.1% 81.04% 2.5% 0" } },
+            { letter: "A", img: imgVectorA, style: { inset: "2.5% 63.09% 1.93% 20.03%" } },
+            { letter: "G", img: imgVectorG, style: { inset: "0 46.8% 0 36.36%" } },
+            { letter: "N", img: imgVectorN, style: { inset: "2.5% 30.12% 2.5% 54.39%" } },
+            { letter: "E", img: imgVectorE, style: { inset: "2.5% 15.44% 2.47% 71.1%" } },
+            { letter: "T", img: imgVectorT, style: { inset: "2.5% 0 1.93% 86.19%" } },
+          ].map(({ letter, img, style }) => (
+            <div key={letter} className="footer-logo-letter absolute" style={style}>
+              <img src={img} alt={letter} className="absolute inset-0 w-full h-full" style={{ maxWidth: "none" }} />
+            </div>
+          ))}
         </div>
       </div>
     </footer>

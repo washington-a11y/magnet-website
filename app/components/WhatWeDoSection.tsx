@@ -145,9 +145,9 @@ export default function WhatWeDoSection() {
           >
             {/* Left: text */}
             <div className="flex flex-col gap-[32px] flex-1 max-w-[800px]">
-              <h2 className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[61px] text-[#111921] leading-none">
+              <h3 className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[61px] text-[#111921] leading-none">
                 {service.title}
-              </h2>
+              </h3>
 
               <div className="flex items-start justify-between">
                 <p className="font-['Neue_Haas_Grotesk_Text_Pro',sans-serif] text-[16px] text-[#41474d] leading-[1.5] tracking-[0.32px] max-w-[450px]">

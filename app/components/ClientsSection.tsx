@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 gsap.registerPlugin(ScrollTrigger);
 
 // Client logos
@@ -95,18 +94,6 @@ export default function ClientsSection() {
         );
       });
 
-      // Partner section text reveal
-      gsap.from(".partner-headline", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".partner-headline",
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      });
     }, sectionRef);
 
     // Carousel autoplay — transform-based, same pattern as logo marquee
@@ -175,7 +162,12 @@ export default function ClientsSection() {
       <div className="flex items-start justify-between w-full">
         {/* Left: tagline */}
         <div className="flex flex-col gap-[32px]">
-          <h2 className="partner-headline font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#111921] tracking-[-0.99px] uppercase">
+          {/* Heading animated by global HeadingAnimator */}
+          <h2
+            className="animated-header partner-headline font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#111921] tracking-[-0.99px] uppercase"
+            data-animate-start="top 85%"
+            data-animate-stagger="0.08"
+          >
             your design partner
           </h2>
           <div className="flex flex-col gap-[32px] max-w-[520px]">

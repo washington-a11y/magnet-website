@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 gsap.registerPlugin(ScrollTrigger);
 
 const imgStar        = "/assets/e3b1833c7b3d8d79e0d2faecc07682d205ff0961.svg";
@@ -14,25 +13,11 @@ const imgDeco4       = "/assets/c1b8de66591eb992fe5106fe70f217b8f3b6a390.svg";
 const imgCalIcon     = "/assets/ee48e31e9c6ce2362b7eb8e8b95bf54f278f3509.svg";
 
 export default function CTASection() {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLParagraphElement>(null);
-  const buttonRef   = useRef<HTMLButtonElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const buttonRef  = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Headline zoom in
-      gsap.from(headlineRef.current, {
-        opacity: 0,
-        scale: 0.92,
-        y: 30,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          toggleActions: "play none none reverse",
-        },
-      });
 
       // Button bounce in
       gsap.from(buttonRef.current, {
@@ -81,13 +66,15 @@ export default function CTASection() {
       className="relative flex flex-col items-center gap-[32px] w-full bg-[#1c1a96] px-[32px] py-[96px] overflow-hidden"
       style={{ minHeight: "414px" }}
     >
-      {/* Headline */}
-      <p
-        ref={headlineRef}
-        className="font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#fafafa] text-center tracking-[-0.99px] uppercase"
+      {/* Headline — animated by global HeadingAnimator */}
+      <h2
+        className="animated-header font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#fafafa] text-center tracking-[-0.99px] uppercase"
+        data-animate-start="top 80%"
+        data-animate-stagger="0.1"
+        data-animate-duration="0.8"
       >
         ready to be magnetic
-      </p>
+      </h2>
 
       {/* Decorative star — top right area, ~64% from left */}
       <div className="cta-deco absolute" style={{ left: "64%", top: "20%", width: "26px", height: "33px" }}>

@@ -160,9 +160,9 @@ export default function WorksSection() {
       className="works-section w-full bg-[#f9faff] px-[32px] py-[96px] flex flex-col gap-[48px]"
     >
       {/* Heading */}
-      <h2 className="works-heading font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#111921] tracking-[-0.99px] uppercase leading-none">
+      <h1 className="works-heading font-['Swis721_Ex_BT',sans-serif] font-bold text-[36px] text-[#111921] tracking-[-0.99px] uppercase leading-none">
         Feature Projects
-      </h2>
+      </h1>
 
       {/* Filter pills */}
       <div className="works-filters flex flex-wrap gap-[12px]">

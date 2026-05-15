@@ -89,8 +89,11 @@ export default function ResultsSection() {
       ref={sectionRef}
       className="relative flex flex-col gap-[48px] items-center w-full bg-[#111921] px-[96px] py-[96px]"
     >
-      {/* ── Marquee ── */}
-      <div className="-mx-[96px] overflow-hidden">
+      {/* Visually-hidden section heading for screen readers */}
+      <h2 className="sr-only">Real Results</h2>
+
+      {/* ── Marquee (decorative) ── */}
+      <div className="-mx-[96px] overflow-hidden" aria-hidden="true">
         <div
           ref={marqueeRef}
           className="flex items-center gap-[16px] w-max"

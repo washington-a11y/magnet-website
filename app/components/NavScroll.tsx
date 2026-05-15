@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import TransitionLink from "./TransitionLink";
 
 // Dark-on-light logo letters (different from the hero white-on-dark versions)
 const imgM = "/assets/b121895865d4d90aa11d08b92e06de70780fb577.svg";
@@ -62,21 +63,11 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
     // ── 1. Hide nav above viewport on mount ──
     gsap.set(navRef.current, { yPercent: -100 });
 
-    // ── 2. Track whether user has scrolled past the hero ──
-    let pastHero = false;
+    // ── 2. Scroll-up reveal logic ──
+    // Hero is position:sticky so IntersectionObserver always sees it as
+    // intersecting. Use scrollY > heroHeight instead.
+    const heroThreshold = window.innerHeight;
 
-    const heroEl = document.querySelector("main > section:first-of-type") as HTMLElement | null;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        pastHero = !entry.isIntersecting;
-        if (!pastHero) hide();
-      },
-      { threshold: 0 }
-    );
-    if (heroEl) observer.observe(heroEl);
-
-    // ── 3. Scroll-up reveal logic ──
     const show = () => {
       if (isVisible.current) return;
       isVisible.current = true;
@@ -89,11 +80,13 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
     };
 
     const onScroll = () => {
-      if (!pastHero) {
-        lastScrollY.current = window.scrollY;
+      const y = window.scrollY;
+      if (y <= heroThreshold) {
+        // Still within / at the hero — keep nav hidden
+        hide();
+        lastScrollY.current = y;
         return;
       }
-      const y = window.scrollY;
       if (y < lastScrollY.current) show();
       else hide();
       lastScrollY.current = y;
@@ -103,7 +96,6 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      observer.disconnect();
       cleanups.forEach((fn) => fn());
     };
   }, [alwaysVisible]);
@@ -145,7 +137,7 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
 
         {/* Nav links */}
         {NAV_LINKS.map(({ label, href }, i) => (
-          <a
+          <TransitionLink
             key={label}
             href={href}
             ref={(el) => { if (el) linksRef.current[i] = el; }}
@@ -156,7 +148,7 @@ export default function NavScroll({ alwaysVisible = false }: { alwaysVisible?: b
             <span
               className="nav-underline absolute bottom-0 left-0 w-full h-[1px] bg-[#111921] block"
             />
-          </a>
+          </TransitionLink>
         ))}
       </div>
     </nav>
