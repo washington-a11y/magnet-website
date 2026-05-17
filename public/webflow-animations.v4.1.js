@@ -18,24 +18,27 @@
 (function () {
   'use strict';
 
-  /* ── TRANSITION PANELS — injected immediately, before any script loads ──
-     Panels cover the page from the very first paint so there's no flash
-     of content. GSAP animates them away once it's ready in init().       */
-  var _PANEL_COLORS = ['#111921', '#FDC6EC', '#FFF085'];
-  // Give each panel its own position:fixed so it's always relative to the viewport,
-  // regardless of any transform on <html> or <body> that Webflow/Lenis may apply.
-  var _overlay = { children: [] };
-  _PANEL_COLORS.forEach(function (color) {
-    var p = document.createElement('div');
-    p.style.cssText = [
-      'position:fixed', 'top:0', 'left:0', 'width:100vw', 'height:100vh',
-      'background:' + color, 'will-change:transform', 'z-index:99999',
-      'pointer-events:none',
-    ].join(';');
-    _overlay.children.push(p);
-    // Append to body if ready, otherwise to documentElement as fallback
-    (document.body || document.documentElement).appendChild(p);
-  });
+  /* ── TRANSITION PANELS ──────────────────────────────────────────────────
+     Panels are injected by a synchronous inline <script> in Webflow's
+     <head> custom code (runs before first paint, no flash).
+     This script just locates them by their data-mg-panel attribute.
+
+     HEAD CUSTOM CODE to paste in Webflow → Pages → Custom Code → Head:
+     ─────────────────────────────────────────────────────────────────────
+     <script>
+     (function(){
+       ['#111921','#FDC6EC','#FFF085'].forEach(function(c,i){
+         var p=document.createElement('div');
+         p.setAttribute('data-mg-panel',i);
+         p.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:'+c+';z-index:99999;pointer-events:none;will-change:transform;';
+         document.documentElement.appendChild(p);
+       });
+     })();
+     </script>
+     ─────────────────────────────────────────────────────────────────────  */
+  var _overlay = {
+    children: Array.prototype.slice.call(document.querySelectorAll('[data-mg-panel]')),
+  };
 
   /* ── Script loader ── */
   function loadScript(src) {
@@ -204,9 +207,8 @@
     var lenis = new Lenis({
       duration: 1.2,
       easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      orientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 2,
-      infinite: false,
     });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
