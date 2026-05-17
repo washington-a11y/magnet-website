@@ -202,20 +202,11 @@
        1. LENIS SMOOTH SCROLL
     ────────────────────────────────────────────── */
     var lenis = new Lenis({
-      // Lower duration = snappier stop, less "float" after you release the wheel
-      duration: 0.9,
-      // Expo-out curve: fast start, very soft landing — removes the snap at stop
-      easing: function (t) {
-        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-      },
+      duration: 1.2,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
       smoothWheel: true,
-      // Slightly reduced multiplier so each tick travels less distance,
-      // which gives the easing more room to breathe at the end
-      wheelMultiplier: 0.85,
-      touchMultiplier: 1.5,
+      touchMultiplier: 2,
       infinite: false,
-      wrapper: window,
-      content: document.documentElement,
     });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
@@ -325,43 +316,9 @@
     });
 
     /* ──────────────────────────────────────────────
-       3. HERO VIDEO SCROLL EXPAND
+       3. HERO — no scroll-expand; video stays fixed size (matches Next.js)
     ────────────────────────────────────────────── */
-    var videoExpand = heroSection ? heroSection.querySelector('.video-promo') : null;
-    if (videoExpand) {
-      var vw = window.innerWidth;
-      var vh = window.innerHeight;
-      var r  = videoExpand.getBoundingClientRect();
-      var scaleNeeded = vw / r.width;
-      var tx = (vw / 2) - (r.left + r.width / 2);
-      var ty = (vh / 2) - (r.top + r.height / 2);
-
-      var fadeable = [
-        heroSection.querySelector('.menutop-hero'),
-        heroSection.querySelector('.logo-big'),
-        heroSection.querySelector('.hero-wrapper'),
-      ].filter(Boolean);
-
-      var heroScrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroSection,
-          start: 'top top',
-          end: '+=800',
-          pin: true,
-          pinSpacing: false, // hero is already position:fixed — don't add spacer height
-          scrub: true,       // no lag; Lenis handles all smoothing
-        },
-      });
-
-      if (fadeable.length) {
-        heroScrollTl.to(fadeable, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, 0);
-      }
-
-      heroScrollTl.to(videoExpand, {
-        scale: scaleNeeded, x: tx, y: ty, borderRadius: 0,
-        duration: 1, ease: 'power2.inOut',
-      }, 0);
-    }
+    // Hero section is position:fixed in Webflow — no pin or scrub needed
 
     /* ──────────────────────────────────────────────
        4. FLAG WAVE
